@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TwilioSMSController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('user/activation/{token}', 'Auth\RegisterController@activateUser')->name('user.activate');
+Route::get('sendSMS', [TwilioSMSController::class, 'index']);
