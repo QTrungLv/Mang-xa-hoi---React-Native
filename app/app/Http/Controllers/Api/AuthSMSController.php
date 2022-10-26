@@ -28,9 +28,9 @@ class AuthSMSController extends BaseController
                 'password' => 'required'
             ]);
 
-            // if ($validated->fails()) {
-            //     return $this->failValidator($validated);
-            // }
+            if ($validated->fails()) {
+                return $this->failValidator($validated);
+            }
 
             $credentials = request(['phone', 'password']);
 

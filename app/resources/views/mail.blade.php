@@ -1,0 +1,5 @@
+
+   <div>
+        OTP: {{$data }}
+    </div>
+
