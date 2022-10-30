@@ -1,18 +1,79 @@
 import React from 'react';
-import { SafeAreaView, Text, StyleSheet, Image } from 'react-native';
+import { Image, SafeAreaView, Text, View, StyleSheet, Pressable } from 'react-native';
 import HeaderLogin from "../Login/HeaderLogin"
-import StartLogin from '../Login/StartLogin';
+import { StartLogin } from '../Login/StartLogin';
+import facebookicon from './../images/facebookicon.jpg'
 
 
-class Home extends React.Component {
-    render() {
-        return (
-            <SafeAreaView>
-                <HeaderLogin title="Tạo tài khoản" />
-                <StartLogin />
-            </SafeAreaView>
-        );
-    }
+export default function Home({ navigation }) {
+
+    return (
+        <SafeAreaView>
+            <View style={styles.imagePosition}>
+                <Image style={styles.image} source={facebookicon} />
+            </View>
+            <View style={styles.textJoinFacebookPosition}>
+                <Text style={styles.textJoinFacebook}>Tham gia Facebook</Text>
+            </View>
+            <View style={styles.textHelpPosition}>
+                <Text style={styles.textHelp}>Chúng tôi sẽ giúp bạn tạo tài khoản mới sau vài phút</Text>
+            </View>
+            <View style={styles.buttonPosition}>
+                <Pressable style={styles.nextButton} onPress={() => { navigation.navigate("NameLogin") }}>
+                    <Text style={styles.textButton}>
+                        Next
+                    </Text>
+                </Pressable>
+            </View>
+        </SafeAreaView>
+    );
+
 }
 
-export default Home;
+const styles = StyleSheet.create({
+    image: {
+        width: 200,
+        height: 200
+    },
+    imagePosition: {
+        marginTop: 90,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    textJoinFacebook: {
+        fontSize: 20,
+        fontWeight: "bold",
+        color: "blue"
+    },
+    textJoinFacebookPosition: {
+        alignItems: "center",
+        marginTop: 20
+    },
+    textHelp: {
+        fontSize: 18,
+        textAlign: "center"
+    },
+    textHelpPosition: {
+        marginTop: 10,
+        alignContent: "center",
+        justifyContent: 'center'
+    },
+    buttonPosition: {
+        marginTop: 10,
+        alignItems: "center"
+    },
+    nextButton: {
+        backgroundColor: "blue",
+        borderRadius: 8,
+        padding: 6,
+        width: 150,
+        height: 40
+    },
+    textButton: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 18
+    }
+})
+
+

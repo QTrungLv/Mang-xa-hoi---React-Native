@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Image, SafeAreaView, Text, View, StyleSheet, Pressable } from 'react-native';
 import facebookicon from '../images/facebookicon.jpg'
 
-StartLogin = ({history}) => {
+const StartLogin = () => {
+
     return (
         <SafeAreaView>
             <View style={styles.imagePosition}>
@@ -15,7 +16,7 @@ StartLogin = ({history}) => {
                 <Text style={styles.textHelp}>Chúng tôi sẽ giúp bạn tạo tài khoản mới sau vài phút</Text>
             </View>
             <View style={styles.buttonPosition}>
-                <Pressable style={styles.nextButton} onPress={() => history.push("/test")}>
+                <Pressable style={styles.nextButton} onPress={() => { navigation.navigate('Test') }}>
                     <Text style={styles.textButton}>
                         Next
                     </Text>
