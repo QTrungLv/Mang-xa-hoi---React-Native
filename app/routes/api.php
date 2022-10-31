@@ -21,10 +21,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
    
 // });
-Route::post('/register', [AuthSMSController::class,'register'])->name("user.register");
-Route::post('/active-account', [AuthSMSController::class,'activeAccount'])->name("user.activeAccount");
+// Route::post('/register', [AuthSMSController::class,'register'])->name("user.register");
 Route::post('/login', [AuthSMSController::class,'login'])->name("user.login");
-Route::post('/verify-phone', [AuthSMSController::class, 'verifiedPhone'])->name('user.verifiedPhone');
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/otp', [AuthController::class, 'authOTP']);
+Route::post('/register', [AuthSMSController::class, 'register'])->name('user.register');
+Route::post('/otp', [AuthSMSController::class, 'authOTP']);

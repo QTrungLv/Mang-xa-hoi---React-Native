@@ -10,8 +10,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Twilio\Rest\Client;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -25,7 +26,10 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'username',
         'is_verified',
+        'email_verified_at',
+        'phone_verified_at'
     ];
 
     /**
@@ -47,5 +51,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'phone_verified_at'=>'datetime',
     ];
-    
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(){
+        return [];
+    }
 }

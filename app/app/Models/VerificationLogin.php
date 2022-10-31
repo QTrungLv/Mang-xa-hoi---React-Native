@@ -11,6 +11,7 @@ class VerificationLogin extends Model
     protected $fillable=[
         'user_id',
         'otp',
+        'verify',
         'expire_at'
     ];
 }

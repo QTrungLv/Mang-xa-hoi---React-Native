@@ -1,66 +1,36 @@
 <?php
-
+  
 namespace App\Mail;
-
+   
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-
+use Illuminate\Contracts\Queue\ShouldQueue;
+  
 class MailOTP extends Mailable
 {
     use Queueable, SerializesModels;
-    public $data;
-
+  
+    public $details;
+   
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($details)
     {
-        // dd($data);
-        $this->data=$data;
-        // dd($this->data);
+        $this->details = $details;
     }
-
+   
     /**
-     * Get the message envelope.
+     * Build the message.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return $this
      */
-    public function envelope()
+     public function build()
     {
-        return new Envelope(
-            subject: 'OTP Login Facebook',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        // dd($this->data);
-        return new Content(
-            view: 'mail',
-            with: [
-                'otp'=>$this->data,
-            ],
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [];
+        return $this->subject('Mail from Real Programmer')
+                    ->view('mail');
     }
 }
