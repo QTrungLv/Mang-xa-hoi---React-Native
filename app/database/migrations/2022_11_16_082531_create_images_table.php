@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('user_codes',function(Blueprint $table) {
-         
-            $table->boolean('verify')->default(false)->after('code');
-            $table->timestamp('expire_at')->nullable()->after('verify');
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('post_id');
+            $table->string('link');
+            $table->string('type'); //video or image
+            $table->timestamps();
         });
     }
 
@@ -27,9 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('user_codes', function (Blueprint $table){
-            $table->dropColumn('verify');
-            $table->dropColumn('expire_at');
-        });
+        Schema::dropIfExists('images');
     }
 };

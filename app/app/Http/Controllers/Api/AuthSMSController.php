@@ -92,8 +92,6 @@ class AuthSMSController extends BaseController
         $validated = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'username'=>'required|max:255|unique:users',
-            // 'email'=>'required|email|unique:users',
-            // 'phone' => 'required|unique:users,phone|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:20',
             'password' => 'required|max:255|min:6',
         ]);
         if ($validated->fails()) {
