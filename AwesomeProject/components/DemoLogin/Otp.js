@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, TextInput, View, Text, Pressable } from 'react-native';
 
-export default function Otp({navigation}) {
+export default function Otp({ navigation }) {
 
     [otp, setOtp] = useState("")
 
@@ -19,10 +19,10 @@ export default function Otp({navigation}) {
                 height: 40,
                 alignItems: "center"
             }} onPress={() => {
-                alert("Read comment in Otp.js")
+
                 //Code to check OTP
                 //If yes uncomment this
-                //navigation.navigate("Success")
+                navigation.navigate("Success")
                 //If no, not test
             }} >
                 <Text style={{ fontSize: 18, color: "white" }}>Login</Text>
