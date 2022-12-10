@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_codes', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->string('code');
+            $table->bigInteger('post_id');
+            $table->string('link');
+            $table->string('type'); //video or image
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_codes');
+        Schema::dropIfExists('images');
     }
 };

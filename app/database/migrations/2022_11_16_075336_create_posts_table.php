@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users',function(Blueprint $table) {
-            $table->timestamp('phone_verified_at')->nullable()->after('phone');
-            $table->boolean('is_verified')->default(false)->after('name');
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('user_id');
+            $table->string('content')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,9 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table){
-            $table->dropColumn('phone_verified_at');
-            $table->dropColumn('is_verified');
-        });
+        Schema::dropIfExists('posts');
     }
 };
