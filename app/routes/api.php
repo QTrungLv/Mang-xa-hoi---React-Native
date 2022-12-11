@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\AuthSMSController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
    
 // });
-Route::post('/register', [AuthSMSController::class,'register'])->name("user.register");
-Route::post('/active-account', [AuthSMSController::class,'activeAccount'])->name("user.activeAccount");
+// Route::post('/register', [AuthSMSController::class,'register'])->name("user.register");
 Route::post('/login', [AuthSMSController::class,'login'])->name("user.login");
-Route::post('/verify-phone', [AuthSMSController::class, 'verifiedPhone'])->name('user.verifiedPhone');
+Route::post('/register', [AuthSMSController::class, 'register'])->name('user.register');
+Route::post('/otp', [AuthSMSController::class, 'authOTP']);
