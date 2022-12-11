@@ -24,9 +24,8 @@ class OTPRequest extends FormRequest
     public function rules()
     {
         return [
-            'username'=>'required',
-            'password'=>'required',
-            'otp'=>'required'
+            'user_id' => 'required',
+            'otp' => 'required'
         ];
     }
 }
