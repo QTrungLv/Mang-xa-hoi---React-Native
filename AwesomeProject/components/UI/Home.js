@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, SafeAreaView, Text, View, StyleSheet, Pressable } from 'react-native';
-import HeaderLogin from "../Login/HeaderLogin"
-import { StartLogin } from '../Login/StartLogin';
+
 import facebookicon from './../images/facebookicon.jpg'
 
 

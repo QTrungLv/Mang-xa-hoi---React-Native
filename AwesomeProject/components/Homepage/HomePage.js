@@ -1,12 +1,19 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function HomePage() {
     return (
         <View>
-            <Text>
+            <Text style={{ fontSize: 32, fontWeight: "bold" }}>
                 HomePage
             </Text>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    font: {
+        fontSize: 32,
+        fontWeight: "bold"
+    }
+})

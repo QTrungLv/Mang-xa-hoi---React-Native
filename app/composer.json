@@ -38,7 +38,7 @@
         "files": [
             "helpers/functions.php"
         ]
-    },
+        },
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
