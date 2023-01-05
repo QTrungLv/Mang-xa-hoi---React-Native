@@ -1,0 +1,8 @@
+-src
+--components
+--redux
+---reducers
+---actions
+--constants.js
+--navigation
+--App and index
