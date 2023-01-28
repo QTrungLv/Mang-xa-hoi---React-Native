@@ -19,6 +19,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthSMSController extends BaseController
 {
+    protected User $user;
     public function __construct()
     {
         $this->user = new User();
@@ -71,7 +72,8 @@ class AuthSMSController extends BaseController
                 throw new Exception('Sai thông tin đăng nhập!');
             }
             $token = JWTAuth::attempt($credentials);
-            $customer->update(['remember_token' => $token]);
+            $customer->remember_token = $token;
+            $customer->save();
             $verificationOTP = VerificationLogin::where('user_id', $customer->id)->latest()->first();
             $now = Carbon::now();
             if ($verificationOTP && $now->isBefore($verificationOTP->expire_at)) {

@@ -4,8 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Exception;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -25,7 +26,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'phone',
-        'sex',
+        // 'sex',
         'first_name',
         'last_name',
         'is_verified',
@@ -59,5 +60,38 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims(){
         return [];
+    }
+
+    /**
+     * @return Attribute
+     */
+
+    protected function username(): Attribute 
+    {
+        // dd($this->getUserName($this->id));
+        return Attribute::make(
+            get: fn () => $this->getUserName($this->id),
+        );
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+
+    protected function getUserName($id): string
+    {
+        $user = User::find($id);
+        if (!empty($user)) {
+            if (!is_null($user->first_name) && !is_null($user->last_name)) {
+                return $user->last_name.' '.$user->first_name;
+            }
+            elseif (!is_null($user->first_name)) {
+                return $user->first_name;
+            }
+            else {
+                return $user->last_name;
+            }
+        }
     }
 }
