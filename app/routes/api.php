@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\AuthSMSController;
+use App\Http\Controllers\Api\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,4 +33,9 @@ Route::prefix('post')->group(function () {
     Route::post('/create', [PostController::class, 'create']);
     Route::put('/{postId}/update', [PostController::class, 'update']);
     Route::post('/{postId}/delete', [PostController::class, 'delete']);
+});
+
+Route::prefix('comment')->middleware('jwt.auth')->group(function () {
+    Route::get('/{id}', [CommentController::class, 'show']);
+    Route::post('store', [CommentController::class, 'store']);
 });
