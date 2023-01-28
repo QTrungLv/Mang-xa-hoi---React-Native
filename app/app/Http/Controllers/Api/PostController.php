@@ -3,62 +3,34 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\PostService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    private PostService $postService;
+    public function __construct(PostService $postService){
+        $this->postService = $postService;
+    }
+    public function create(Request $request){
+        return $this->postService->create($request);
+    }
+     public function update($postId, Request $request){
+       
+         return $this->postService->update($postId, $request);
+    }
+    public function delete($postId, Request $request){
+         return $this->postService->delete($postId,$request);
+    }
+     public function show(){
         
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+     public function all(Request $request){
+         return $this->postService->getAll();
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+      public function listByUser(Request $request){
+        $userId = $request->user_id;
+         return $this->postService->getByUser($userId,$request);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+ 
 }
