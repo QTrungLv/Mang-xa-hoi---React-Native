@@ -6,10 +6,10 @@ import HomePage from './HomePage'
 import Message from './Message'
 import Notify from './Notify'
 import Setting from './Settings'
-import homeicon from '../images/homeicon.png'
-import messageicon from '../images/messageicon.jpg'
-import notifyicon from '../images/notifyicon.png'
-import navbaricon from '../images/baricon.png'
+import homeicon from '../../assets/icon/homeicon.png'
+import messageicon from '../../assets/icon/messageicon.jpg'
+import notifyicon from '../../assets/icon/notifyicon.png'
+import navbaricon from '../../assets/icon/baricon.png'
 
 const Tab = createBottomTabNavigator()
 

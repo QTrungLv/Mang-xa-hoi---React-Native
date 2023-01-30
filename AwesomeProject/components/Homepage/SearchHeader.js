@@ -1,5 +1,5 @@
 import React from 'react';
-import searchicon from '../images/searchicon.png'
+import searchicon from '../../assets/icon/searchicon.png'
 import { TextInput, View, Image, StyleSheet } from 'react-native';
 
 export default function SearchHeader() {

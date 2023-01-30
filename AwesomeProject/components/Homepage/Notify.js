@@ -1,8 +1,8 @@
 import React from 'react'
 import { ScrollView, Text, View, StyleSheet, Image } from 'react-native'
 import SearchHeader from './SearchHeader'
-import avatarfr from '../images/avatarfr.jpg'
-import avatar from '../images/avatar.jpg'
+import avatarfr from '../../assets/icon/avatarfr.jpg'
+import avatar from '../../assets/icon/avatar.jpg'
 export default function Notify() {
   return (
     <ScrollView>

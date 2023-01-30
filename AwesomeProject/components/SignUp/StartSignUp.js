@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, SafeAreaView, Text, View, StyleSheet, Pressable } from 'react-native';
-import facebookicon from './../images/facebookicon.jpg'
+import facebookicon from './../../assets/icon/facebookicon.jpg'
 
 
 export default function StartSignUp({ navigation }) {

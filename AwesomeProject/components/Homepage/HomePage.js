@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, SafeAreaView, Pressable, ScrollView } from 'react-native';
-import searchicon from '../images/searchicon.png'
-import homeicon from '../images/homeicon.png'
-import messageicon from '../images/messageicon.jpg'
-import notifyicon from '../images/notifyicon.png'
-import navbaricon from '../images/baricon.png'
-import avatar from '../images/avatar.jpg'
-import postImage from '../images/postImage.jpg'
-import likeicon from '../images/likeicon.png'
-import shareicon from '../images/shareicon.png'
-import likedicon from '../images/likedicon.png'
+import searchicon from '../../assets/icon/searchicon.png'
+import homeicon from '../../assets/icon/homeicon.png'
+import messageicon from '../../assets/icon/messageicon.jpg'
+import notifyicon from '../../assets/icon/notifyicon.png'
+import navbaricon from '../../assets/icon//baricon.png'
+import avatar from '../../assets/icon//avatar.jpg'
+import postImage from '../../assets/icon//postImage.jpg'
+import likeicon from '../../assets/icon//likeicon.png'
+import shareicon from '../../assets/icon//shareicon.png'
+import likedicon from '../../assets/icon//likedicon.png'
 import SearchHeader from './SearchHeader';
 
+import Post from '../Post/Post';
 
 
-export default function HomePage() {
+export default function HomePage({ navigation }) {
 
     const [like, setLike] = useState("likeicon")
 
@@ -22,10 +23,10 @@ export default function HomePage() {
         <ScrollView style={styles.container}>
             <SearchHeader />
 
-            <View style={styles.makePostContainer}>
+            <Pressable style={styles.makePostContainer} onPress={() => navigation.navigate("MakePost")}>
                 <View styles={styles.headerMakePost}>
                     <Image style={styles.avatarImage} source={avatar} />
-                    <TextInput placeholder='How are you today?' />
+                    <Text style={{ height: 40, marginTop: 5 }}>How are you today?</Text>
                 </View>
                 <View style={styles.postButtonContainer}>
                     <Pressable style={styles.postButton}>
@@ -38,28 +39,9 @@ export default function HomePage() {
                         <Text>Make album</Text>
                     </Pressable>
                 </View>
+            </Pressable>
 
-            </View>
-
-
-            <View style={styles.postContainer}>
-                <View style={styles.headerPost}>
-                    <Image style={styles.avatarImage} source={avatar} />
-                    <View style={styles.postTextHeader}>
-                        <Text style={styles.textName}>Quang Trung</Text>
-                        <Text style={styles.textTime}>An hour ago</Text>
-                    </View>
-                </View>
-                <Image source={postImage} style={styles.postImage} />
-                <View style={styles.likeShareContainer}>
-                    <Pressable style={styles.likeShareButton}>
-                        <Image source={likeicon} style={styles.likeShare} />
-                    </Pressable>
-                    <Pressable style={styles.likeShareButton}>
-                        <Image source={shareicon} style={styles.likeShare} />
-                    </Pressable>
-                </View>
-            </View>
+            <Post name="Quang Trung" image={postImage} created="An hour go" is_like={false} />
         </ScrollView>
     );
 }
@@ -67,7 +49,7 @@ export default function HomePage() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+        backgroundColor: "#F5FCFF"
     },
 
     navbarBottom: {
@@ -98,10 +80,10 @@ const styles = StyleSheet.create({
     },
 
     makePostContainer: {
-        margin: 10,
-        borderWidth: 1,
-        borderColor: "#000",
-        borderRadius: 10,
+        marginTop: 10,
+        marginBottom: 10,
+        borderWidth: 0.5,
+        backgroundColor: "white",
         padding: 10,
     },
     headerMakePost: {
@@ -118,59 +100,12 @@ const styles = StyleSheet.create({
     postButtonContainer: {
         flexDirection: "row"
     },
-
-
-    postContainer: {
-        borderWidth: 1,
-        borderColor: "#000",
-
-        margin: 10,
-        borderRadius: 10,
-        padding: 10
-    },
-    headerPost: {
-        flexDirection: "row",
-
-    },
     avatarImage: {
         width: 40,
         height: 40,
         borderRadius: 45
     },
-    postTextHeader: {
-        flexDirection: "column",
-        marginLeft: 10
-    },
-    textName: {
-        fontSize: 16,
-        fontWeight: "bold",
-        color: "#000"
-    },
-    textTime: {
-        color: "gray"
 
-    },
-    postImage: {
-        width: "100%",
-        height: 200,
-        marginTop: 10,
-    },
-    likeShareContainer: {
-        flexDirection: "row",
-        marginTop: 10
-    },
-    likeShareButton: {
-        borderWidth: 1,
-        borderColor: "#000",
-        width: "50%",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 10
-    },
-    likeShare: {
-        width: 40,
-        height: 40,
 
-    }
 
 });

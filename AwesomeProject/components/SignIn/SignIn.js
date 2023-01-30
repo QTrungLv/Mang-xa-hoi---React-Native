@@ -2,16 +2,32 @@ import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View, Image, Text, TextInput, Pressable, Alert, } from 'react-native';
 import { BASE_URL } from '../../Constrant';
 import { SignInContext } from '../../context/SignInContext';
-import facebookicon1 from './../images/facebookicon.png'
+import facebookicon1 from '../../assets/icon/facebookicon.png'
 import axios from 'axios';
-import { connect, useDispatch } from 'react-redux';
-import { signIn } from '../../redux/actions/action';
+import { connect } from 'react-redux';
+import { signIn } from '../../redux/actions/action'
+import Dialog from 'react-native-dialog';
+import { set } from 'immer/dist/internal';
 
 
 
+const mapDispatchToProps = (dispatch) => {
 
+    return {
+        signIn: (data) => {
+            console.log("Dispatch")
+            dispatch(signIn(data))
+        }
+    }
+}
 
-const SignIn = ({ navigation }) => {
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+
+function SignIn(props) {
 
     // const [SignInForm, setSignInForm] = useState({
     //     username: "",
@@ -21,33 +37,63 @@ const SignIn = ({ navigation }) => {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+
+
     const [message, setMessage] = useState("")
+    const [message1, setMessage1] = useState("")
+    //Kiem tra lan nhap username dau
+    const [done, setDone] = useState(false)
+
+    //Kiem tra lan nhap password dau
+    const [done1, setDone1] = useState(false)
+
+    //Dialog
+    const [dialog, setDialog] = useState("")
+    const [showDialog, setShowDialog] = useState(false)
     // const onChangeSignInForm = () => {
     //     setUsername()
     // }
 
+
+    //Kiem tra username
+    //TC1: Khong phai email --> Email khong hop le
+    //TC2: 
+    useEffect(() => {
+        username < 6 ? setMessage("Email không hợp lệ") : setMessage("")
+    }, [username])
+
+    useEffect(() => {
+        password.length < 6 ? setMessage1("Password phải có từ 6 kí tự trở lên") : setMessage1("")
+    }, [password])
+
+
     const handleSignIn = async () => {
-        console.log("Start")
-        const signInForm = {
-            username: username,
-            password: password
-        }
+        // console.log("Start")
+        // const signInForm = {
+        //     username: username,
+        //     password: password
+        // }
+
         try {
-            const response = await axios.post('http://10.0.2.2:8000/api/login?username=yenlinh2310.tn@gmail.com&password=example')
+            const response = await axios.post('http://10.0.2.2:8000/api/login?username=' + username + '&password=' + password)
+            console.log(response.data)
             if (response.data.success) {
-                signIn(signInForm)
 
-                //navigation.navigate("Tab")
+                props.signIn({ username: username, password: password })
+                props.navigation.navigate("OTP")
+                
             } else {
-
-                console.log("response.data.message")
+                setDialog(response.data.message)
+                setShowDialog(true)
             }
-
-
         } catch (error) {
             console.log(error)
         }
     }
+
+    const handleCancel = () => {
+        setShowDialog(false);
+    };
 
     return (
         <ScrollView style={styles.container}>
@@ -66,15 +112,16 @@ const SignIn = ({ navigation }) => {
                 <Text style={styles.inputTitle}>Email</Text>
             </View>
             <View style={styles.textInputPosition}>
+
                 <TextInput
                     style={styles.textInput}
                     placeholder='Email or Phone Number'
                     name='username'
                     value={username}
-                    onChangeText={value => setUsername(value)}
-                    onEndEditing={() => { username.length < 6 ? setMessage("Email invalid") : setMessage("") }}
+                    onChangeText={value => { setUsername(value) }}
+                    onEndEditing={() => { setDone(true) }}
                 />
-                <Text style={styles.message}>{message}</Text>
+                {!done || username.length === 0 ? <></> : !message ? <></> : <Text style={styles.message}>{message}</Text>}
             </View>
             <View style={styles.inputTitletPosition}>
                 <Text style={styles.inputTitle}>Password</Text>
@@ -87,7 +134,10 @@ const SignIn = ({ navigation }) => {
                     name="password"
                     value={password}
                     onChangeText={value => setPassword(value)}
+                    onEndEditing={() => setDone1(true)}
                 />
+                {!done1 || password.length === 0 ? <></> : !message1 ? <></> : <Text style={styles.message}>{message1}</Text>}
+
             </View>
 
             <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? '#4267B2' : '#2196F3' }, styles.button]} onPress={handleSignIn}>
@@ -100,19 +150,26 @@ const SignIn = ({ navigation }) => {
                 <View style={styles.forgotPosition}>
                     <Text style={styles.forgot}>Forgot Password?</Text>
                 </View>
-                <Pressable style={styles.signUpPosition} onPress={() => navigation.navigate("SignUp")}>
+                <Pressable style={styles.signUpPosition} onPress={() => props.navigation.navigate("SignUp")}>
                     <Text style={styles.signUp}>Sign Up</Text>
                 </Pressable>
             </View>
 
+            {/* Dialog lỗi tài khoản mật khẩu không đúng  */}
+            <Dialog.Container visible={showDialog}>
+                <Dialog.Title>Lỗi đăng nhập</Dialog.Title>
+                <Dialog.Description>
+                    {dialog}
+                </Dialog.Description>
+                <Dialog.Button label="OK" onPress={handleCancel} />
+            </Dialog.Container>
         </ScrollView>
     )
 
-
-
 }
 
-export default connect(null, signIn)(SignIn)
+
+export default connect(null, mapDispatchToProps)(SignIn)
 
 const styles = StyleSheet.create({
     container: {

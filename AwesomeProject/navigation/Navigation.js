@@ -4,20 +4,23 @@ import React from 'react';
 import Otp from '../components/SignIn/Otp';
 import SignIn from '../components/SignIn/SignIn';
 import TabNavigation from '../components/Homepage/TabNavigation'
-import Post from '../components/Post/Post';
 import SignUp from '../components/SignUp/SignUp'
+import Redirect from '../components/Redirect/Redirect';
+import MakePost from '../components/Post/MakePost';
+import Post from '../components/Post/Post';
 
 const Stack = createNativeStackNavigator()
 
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='SignIn' /*screenOptions={{ headerShown: false }}*/ >
-                {/* <Stack.Screen name={"Redirect"} component={Redirect} /> */}
-                <Stack.Screen name={"OTP"} component={Otp} options={{ headerShow: false }} />
-                <Stack.Screen name={"SignIn"} component={SignIn} />
-                <Stack.Screen name={"MakePost"} component={Post} options={{ title: 'Make Post' }} />
+            <Stack.Navigator initialRouteName='Redireact' screenOptions={{ headerShown: true }} >
+                <Stack.Screen name={"Redirect"} component={Redirect} />
+                <Stack.Screen name={"OTP"} component={Otp} /*options={{ headerShow: false }}*/ />
+                <Stack.Screen name={"SignIn"} component={SignIn} /*options={{ headerShown: false }}*/ />
+                <Stack.Screen name={"MakePost"} component={MakePost} options={{ headerShown: false }} />
                 <Stack.Screen name={"SignUp"} component={SignUp} />
+                <Stack.Screen name={"Post"} component={Post} />
                 {/* <Stack.Screen name={"NameLogin"} component={NameLogin} /> */}
                 {/* <Stack.Screen name={"HomePage"} component={HomePage} /> */}
                 {/* <Stack.Screen name={"Input"} component={InputSignIn} /> */}

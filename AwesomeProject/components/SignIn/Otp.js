@@ -1,13 +1,15 @@
-import React from 'react';
-import facebookicon1 from './../images/facebookicon2.png'
+import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, Image } from 'react-native';
 
 export default function Otp() {
+
+    const [otp, setOtp] = useState("")
+
+
     return (
-        <SafeAreaView>
-            <Image source={facebookicon1} alt/>
-            <Text>We have sent a OTP to your email. Enter this below</Text>
-            <Text>Enter your OTP</Text>
+        <SafeAreaView style={{flex: 1, backgroundColor: "#F5FCFF", alignItems: "center", justifyContent: "center"}}>
+            <Text>Chúng tôi đã gửi OTP đến email của bạn. Vui lòng kiểm tra email và điền OTP của bạn xuống dưới</Text>
+            <Text>OTP của bạn: </Text>
             <TextInput placeholder='Ex: 123456' />
         </SafeAreaView>
     )
