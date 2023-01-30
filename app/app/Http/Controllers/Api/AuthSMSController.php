@@ -190,7 +190,7 @@ class AuthSMSController extends BaseController
                 return $this->withSuccessMessage('Kích hoạt tài khoản thành công!');
             } else {
                 $token = $user->remember_token;
-                return $this->responseWithToken($token);
+                return $this->responseWithToken($token, $user);
             }
         }
         return $this->sendError("Xác thực không thành công!");
@@ -305,9 +305,9 @@ class AuthSMSController extends BaseController
         ];
         Mail::to($email)->send(new MailOTP($details));
     }
-    public function responseWithToken($token)
+    public function responseWithToken($token, $user)
     {
-        $user = auth()->user();
+        // $user = auth()->user();
         $data = [
             'token' => $token,
             'user' => $user,

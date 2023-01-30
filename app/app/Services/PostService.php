@@ -48,9 +48,20 @@ class PostService extends BaseService{
          return $this->sendResponse($listPostbyUser, '');
          
     }
-    public function getInfo($postId){
-        $post = $this->postRepository->find($postId);
-         return $this->sendResponse($post, '');
+    public function getLike($postId){
+        $post = $this->postRepository->getLike($postId);
+        $post = isset($post) ? $post : ['like' => 0];
+        if ($post)
+            return $this->sendResponse($post, '');
+        return sendError(null, 'Không thành công');
+    }
+
+    public function likePost($request, $post_id)
+    {
+        $post = $this->postRepository->likePost($request, $post_id);
+        if ($post)
+            return $this->getLike($post_id);
+        return sendError(null, 'Không thành công');
     }
 }
 ?>
