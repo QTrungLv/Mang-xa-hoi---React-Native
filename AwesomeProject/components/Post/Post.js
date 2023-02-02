@@ -16,7 +16,7 @@ import postImage from '../../assets/icon/postImage.jpg'
 //is_like - string: kiem tra da like
 //
 
-export default function Post({ id, name, image, video = null, described, created, like, comment, is_like, is_block }) {
+export default function Post({name, image, video = null, described = "Test", created, like, comment, is_like, is_block }) {
     return (
         <View style={styles.postContainer} >
             <View style={styles.headerPost}>
@@ -26,6 +26,8 @@ export default function Post({ id, name, image, video = null, described, created
                     <Text style={styles.textTime}>{created}</Text>
                 </View>
             </View>
+
+            <Text style={styles.description}>{described}</Text>
             <Image source={image} style={styles.postImage} />
 
             {/** Note 1: Video code for video */}
@@ -94,5 +96,8 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
 
+    },
+    description: {
+        fontSize: 18,
     }
 })

@@ -1,32 +1,83 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, View, Image, StyleSheet, Text, TextInput, Pressable } from 'react-native'
 import avatar from '../../assets/icon/avatar.jpg'
 import goBack from '../../assets/icon/goback.png'
 import imageicon from '../../assets/icon/imageicon.png'
-import ActionSheet from 'react-native-actionsheet'
+import drafticon from '../../assets/icon/drafticon.png'
+import trashicon from '../../assets/icon/trashicon.png'
+import RBSheet from "react-native-raw-bottom-sheet";
+import { launchImageLibrary } from 'react-native-image-picker';
+
+import DocumentPicker from 'react-native-document-picker';
+
 
 export default function MakePost({ navigation }) {
 
-    const [data, setData] = useState({
-        avatar: '../../assets/icon/avatar.jpg',
-        name: "Quang Trung"
-    })
+    // Post 
+    const [description, setDecription] = useState("")
+    const [image, setImage] = useState(null)
+
+    //Post pimages
+    const [numOfPictures, setNumOfPictures] = useState(0)
+
+    //postButton
+    const [postButtonDisabled, setPostButtonDisabled] = useState(true)
+
+    const refRBSheet = useRef()
+
+    const selectFile = async () => {
+        // Opening Document Picker to select one file
+        try {
+            const res = await DocumentPicker.pick({
+                // Provide which type of file you want user to pick
+                type: [DocumentPicker.types.allFiles],
+                // There can me more options as well
+                // DocumentPicker.types.allFiles
+                // DocumentPicker.types.images
+                // DocumentPicker.types.plainText
+                // DocumentPicker.types.audio
+                // DocumentPicker.types.pdf
+            });
+            // Printing the log realted to the file
+            console.log('res : ' + JSON.stringify(res));
+            // Setting the state to show single file attributes
+            setSingleFile(res);
+        } catch (err) {
+            setSingleFile(null);
+            // Handling any exception (If any)
+            if (DocumentPicker.isCancel(err)) {
+                // If user canceled the document selection
+                alert('Canceled');
+            } else {
+                // For Unknown Error
+                alert('Unknown Error: ' + JSON.stringify(err));
+                throw err;
+            }
+        }
+    };
+
+
+    const handlerPost = async () => {
+        try {
+            //Call api
+
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     //Note 2
     function handlerGoBack() {
 
-        !post ? navigation.goBack() : <></>
+        refRBSheet.current.open()
 
+        //!post ? navigation.goBack() : <></>
     }
-    
-    //Post pimages
-    const [numOfPictures, setNumOfPictures] = useState(0)
 
-    //describe post
-    const [post, setPost] = useState("")
 
-    //postButton
-    const [postButtonDisabled, setPostButtonDisabled] = useState(true)
+
+
 
     useEffect(() => {
         post ? setPostButtonDisabled(false) : setPostButtonDisabled(true)
@@ -56,7 +107,7 @@ export default function MakePost({ navigation }) {
                 <View style={styles.headerPost}>
                     <Image style={styles.avatarImage} source={avatar} />
                     <View style={styles.personalPost}>
-                        <Text style={styles.namePost}>{data.name}</Text>
+                        <Text style={styles.namePost}>Quang Trung</Text>
                         <Text style={styles.publicPost}>Public</Text>
                     </View>
                 </View>
@@ -95,6 +146,38 @@ export default function MakePost({ navigation }) {
                 <Text style={styles.textButton}>Chèn liên kết</Text>
             </Pressable>
 
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                closeDuration={100}
+                visible={true}
+                customStyles={{
+                    wrapper: {
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000"
+                    }
+                }}
+            >
+                <View style={{ height: 60, borderBottomWidth: 0.5 }}>
+                    <Text style={styles.bottomSheetTitleButton}>Bạn muốn hoàn thành bài viết sau?</Text>
+                    <Text style={{ marginLeft: 20 }}>Lưu bản nháp hoặc tiếp tục chỉnh sửa</Text>
+                </View>
+
+                <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "#D9D9D9" : "white" }, styles.bottomSheetButton]} onPress={() => { }}>
+                    <Image source={drafticon} style={styles.buttomSheetIconButton} />
+                    <Text style={styles.buttomSheetTextButton}>Lưu làm bản nháp</Text>
+                </Pressable>
+                <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "#D9D9D9" : "white" }, styles.bottomSheetButton]} onPress={() => { }}>
+                    <Image source={trashicon} style={styles.buttomSheetIconButton} />
+                    <Text style={styles.buttomSheetTextButton}>Bỏ bài viết</Text>
+                </Pressable>
+                <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "#D9D9D9" : "white" }, styles.bottomSheetButton]} onPress={() => { }}>
+                    <Image source={drafticon} style={styles.buttomSheetIconButton} />
+                    <Text style={styles.buttomSheetTextButton2}>Tiếp tục chỉnh sửa</Text>
+                </Pressable>
+            </RBSheet>
 
 
         </SafeAreaView>
@@ -209,6 +292,34 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginLeft: 10
+    },
+    bottomSheetTitleButton: {
+        fontSize: 22,
+        fontWeight: "bold",
+        color: "#000",
+        marginLeft: 20
+    },
+    bottomSheetButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        height: 50,
+        marginLeft: 20,
+        marginTop: 5
+    },
+    buttomSheetIconButton: {
+        width: 40,
+        height: 40,
+    },
+    buttomSheetTextButton: {
+        fontSize: 18,
+        color: "#000",
+        fontWeight: "600",
+        shadowOpacity: 0.8
+    },
+    buttomSheetTextButton2: {
+        fontSize: 18,
+        color: "blue",
+        fontWeight: "600",
+        shadowOpacity: 0.8
     }
-
 })

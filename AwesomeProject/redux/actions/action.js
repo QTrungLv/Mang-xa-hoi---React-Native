@@ -8,3 +8,9 @@ export const signIn = (content) => {
         payload: content
     }
 }
+export const signUp = (content) => {
+    return{
+        type: SIGN_UP,
+        payload: content
+    }
+}

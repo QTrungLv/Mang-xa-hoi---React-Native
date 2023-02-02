@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator()
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Redireact' screenOptions={{ headerShown: true }} >
+            <Stack.Navigator initialRouteName='MakePost' screenOptions={{ headerShown: true }} >
                 <Stack.Screen name={"Redirect"} component={Redirect} />
                 <Stack.Screen name={"OTP"} component={Otp} /*options={{ headerShow: false }}*/ />
                 <Stack.Screen name={"SignIn"} component={SignIn} /*options={{ headerShown: false }}*/ />

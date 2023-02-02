@@ -41,7 +41,7 @@ export default function HomePage({ navigation }) {
                 </View>
             </Pressable>
 
-            <Post name="Quang Trung" image={postImage} created="An hour go" is_like={false} />
+            <Post name="Quang Trung" image={postImage} created="An hour go" is_like={false} decribed="Description"/>
         </ScrollView>
     );
 }
