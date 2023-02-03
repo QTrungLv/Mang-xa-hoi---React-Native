@@ -23,7 +23,7 @@ class PostService extends BaseService{
             $post = $this->postRepository->create(['user_id' => 1, 'content' => $request->described ? $request->described : '']);
             if ($request->file('image')) {
                 $data = [];
-                foreach ([$request->file('image')] as $image) {
+                foreach ($request->file('image') as $image) {
                     $extension = $image->getClientOriginalExtension();
                     $file = now() . $image->getClientOriginalName() . '.' . $extension;
                     $uploadedfile = fopen($image, 'r');
