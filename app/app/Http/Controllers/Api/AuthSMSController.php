@@ -38,13 +38,12 @@ class AuthSMSController extends BaseController
         return $field;
     }
     public function login(Request $request)
-    {
+    { 
         try {
             $validated = Validator::make($request->all(), [
                 'username' => 'required',
                 'password' => 'required'
             ]);
-
             if ($validated->fails()) {
                 return $this->failValidator($validated);
             }
@@ -76,6 +75,7 @@ class AuthSMSController extends BaseController
             $customer->save();
             $verificationOTP = VerificationLogin::where('user_id', $customer->id)->latest()->first();
             $now = Carbon::now();
+           
             if ($verificationOTP && $now->isBefore($verificationOTP->expire_at)) {
                 $this->sendOTP($typeinput, $request->username, $verificationOTP->otp);
             } else {
