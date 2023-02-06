@@ -11,15 +11,20 @@ use Storage;
 class PostController extends Controller
 {
     private PostService $postService;
+    protected $database;
     public function __construct(PostService $postService){
         $this->postService = $postService;
+         $this->database = app('firebase.database');
     }
     public function upload(Request $request){
+        $postData = [
+            'customer' => 'John',
+            'email' => 'email@example.com'
+        ];
+      $postRef = $this->database->getReference('customer')->push($postData);
         $bucket=app('firebase.storage')->getBucket();
         $bucket->object('OKBro.jpg')->delete();
-        dd("OK");
         $fileUpload = $request->file('file');
-        // dd($request->file('file')->getSize());
         $extension = $request->file('file')->getClientOriginalExtension();
         $file      =  '.' . $extension;
          $uploadedfile = fopen($fileUpload, 'r');
