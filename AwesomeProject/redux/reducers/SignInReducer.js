@@ -1,7 +1,5 @@
 const intialState = {
     user: [],
-    token: "",
-    id: ""
 }
 
 //action: username, password
@@ -12,8 +10,6 @@ export default function SignInReducer(state = intialState, action) {
             return {
                 ...state,
                 user: newUser,
-                token: action.payload.token,
-                id: action.payload.id
             }
         default: {
             console.log("Default - SI")

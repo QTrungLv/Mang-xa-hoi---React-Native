@@ -8,23 +8,30 @@ import SignUp from '../components/SignUp/SignUp'
 import Redirect from '../components/Redirect/Redirect';
 import MakePost from '../components/Post/MakePost';
 import Post from '../components/Post/Post';
+import ReportPost from '../components/Post/ReportPost';
+import Birthday from '../components/SignUp/Birthday';
+import OtpSignUp from '../components/SignUp/otp';
 
 const Stack = createNativeStackNavigator()
 
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='MakePost' screenOptions={{ headerShown: true }} >
+            <Stack.Navigator initialRouteName='Redirect' screenOptions={{ headerShown: true }} >
                 <Stack.Screen name={"Redirect"} component={Redirect} />
-                <Stack.Screen name={"OTP"} component={Otp} /*options={{ headerShow: false }}*/ />
+                <Stack.Screen name={"Otp"} component={Otp} /*options={{ headerShow: false }}*/ />
+                <Stack.Screen name={"OtpSignUp"} component={OtpSignUp} /*options={{ headerShow: false }}*/ />
                 <Stack.Screen name={"SignIn"} component={SignIn} /*options={{ headerShown: false }}*/ />
                 <Stack.Screen name={"MakePost"} component={MakePost} options={{ headerShown: false }} />
                 <Stack.Screen name={"SignUp"} component={SignUp} />
                 <Stack.Screen name={"Post"} component={Post} />
+                <Stack.Screen name={"Ngày Sinh"} component={Birthday} />
+
                 {/* <Stack.Screen name={"NameLogin"} component={NameLogin} /> */}
                 {/* <Stack.Screen name={"HomePage"} component={HomePage} /> */}
                 {/* <Stack.Screen name={"Input"} component={InputSignIn} /> */}
                 <Stack.Screen name={"Tab"} component={TabNavigation} />
+                <Stack.Screen name={"ReportPost"} component={ReportPost} />
             </Stack.Navigator>
         </NavigationContainer>
     )

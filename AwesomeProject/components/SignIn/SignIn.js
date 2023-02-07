@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Image, Text, TextInput, Pressable, Alert, } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Image, Text, TextInput, Pressable, Alert, AsyncStorage } from 'react-native';
 import { BASE_URL } from '../../Constrant';
 import { SignInContext } from '../../context/SignInContext';
 import facebookicon1 from '../../assets/icon/facebookicon.png'
@@ -73,21 +73,22 @@ function SignIn(props) {
         //     username: username,
         //     password: password
         // }
-
+        props.navigation.navigate("Otp", { user_id: 1 })
         try {
-            const response = await axios.post('http://10.0.2.2:8000/api/login?username=' + username + '&password=' + password)
+            const response = await axios.post('http://10.0.2.2:8000/api/login', {
+                username: username,
+                password: password
+            })
             console.log(response.data)
             if (response.data.success) {
-
-                props.signIn({ username: username, password: password })
-                props.navigation.navigate("OTP")
-                
+                props.navigation.navigate("Otp", { user_id: response.user_id })
             } else {
-                setDialog(response.data.message)
-                setShowDialog(true)
+                setDialog(response.data.message).
+                    setShowDialog(true)
             }
         } catch (error) {
-            console.log(error)
+            setDialog(response.data.message).
+                setShowDialog(true)
         }
     }
 

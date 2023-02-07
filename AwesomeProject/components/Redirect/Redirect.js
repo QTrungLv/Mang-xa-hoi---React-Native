@@ -29,9 +29,15 @@ export default function Redirect({ navigation }) {
                 </Text>
             </Pressable>
             <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "blue" : "white" }, styles.button]}
-                onPress={() => navigation.navigate("OTP")}>
+                onPress={() => navigation.navigate("Otp")}>
                 <Text>
                     OTP
+                </Text>
+            </Pressable>
+            <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "blue" : "white" }, styles.button]}
+                onPress={() => navigation.navigate("ReportPost")}>
+                <Text>
+                    Report Post
                 </Text>
             </Pressable>
         </ScrollView>

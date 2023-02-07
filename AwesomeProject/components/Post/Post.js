@@ -16,7 +16,7 @@ import postImage from '../../assets/icon/postImage.jpg'
 //is_like - string: kiem tra da like
 //
 
-export default function Post({name, image, video = null, described = "Test", created, like, comment, is_like, is_block }) {
+export default function Post({ name, image, video = null, described = "Test", created, like, comment, is_like, is_block }) {
     return (
         <View style={styles.postContainer} >
             <View style={styles.headerPost}>

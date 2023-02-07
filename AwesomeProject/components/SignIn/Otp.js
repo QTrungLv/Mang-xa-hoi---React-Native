@@ -5,6 +5,8 @@ import Dialog from 'react-native-dialog';
 
 export default function Otp(props) {
 
+    const user_id = props.route.params.user_id
+
     const [otp, setOtp] = useState("")
     const [message, setMessage] = useState("")
     const [done, setDone] = useState(false)
@@ -18,7 +20,10 @@ export default function Otp(props) {
 
     const handleConfirm = async () => {
         try {
-            const response = await axios.post("http://10.0.2.2:8000/api/che")
+            const response = await axios.post("http://10.0.2.2:8000/api/", {
+                user_id: user_id,
+                otp: otp
+            })
             if (response.data.success) {
                 props.navigation.navigate("Tab")
             } else {
