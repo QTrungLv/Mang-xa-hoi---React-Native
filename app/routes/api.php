@@ -31,9 +31,11 @@ Route::post('/otp', [AuthSMSController::class, 'authOTP']);
 Route::prefix('post')->middleware('jwt.auth')->group(function () {
     Route::get('/', [PostController::class, 'all']);
     Route::get('/list', [PostController::class, 'listByUser']);
+    Route::get('/{id}', [PostController::class, 'show']);
     Route::post('/create', [PostController::class, 'create']);
-    Route::put('/{postId}/update', [PostController::class, 'update']);
-    Route::post('/{postId}/delete', [PostController::class, 'delete']);
+    Route::put('/{id}/update', [PostController::class, 'update']);
+    Route::post('/{id}/delete', [PostController::class, 'delete']);
+    Route::post('/upload-file', [PostController::class, 'upload']);
     Route::get('/getInfo/{post_id}', [PostController::class, 'getInfo']);
     Route::post('/{post_id}/likePost', [PostController::class, 'likePost']);
 });

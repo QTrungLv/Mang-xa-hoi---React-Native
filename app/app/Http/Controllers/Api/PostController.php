@@ -4,26 +4,48 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\PostService;
+use Google\Cloud\Storage\StorageClient;
 use Illuminate\Http\Request;
+use Storage;
 
 class PostController extends Controller
 {
     private PostService $postService;
+    protected $database;
     public function __construct(PostService $postService){
         $this->postService = $postService;
+         $this->database = app('firebase.database');
+    }
+    public function upload(Request $request){
+        $postData = [
+            'customer' => 'John',
+            'email' => 'email@example.com'
+        ];
+      $postRef = $this->database->getReference('customer')->push($postData);
+        $bucket=app('firebase.storage')->getBucket();
+        $bucket->object('OKBro.jpg')->delete();
+        $fileUpload = $request->file('file');
+        $extension = $request->file('file')->getClientOriginalExtension();
+        $file      =  '.' . $extension;
+         $uploadedfile = fopen($fileUpload, 'r');
+        $object = $bucket->upload($uploadedfile, [
+            'name' => "OKBro".$file
+        ]);
+        // dd($object);
+            return null;
     }
     public function create(Request $request){
         return $this->postService->create($request);
     }
-     public function update($postId, Request $request){
+     public function update($id, Request $request){
        
-         return $this->postService->update($postId, $request);
+         return $this->postService->update($id, $request);
     }
-    public function delete($postId, Request $request){
-         return $this->postService->delete($postId,$request);
+    public function delete($id, Request $request){
+         return $this->postService->delete($id,$request);
     }
-     public function show(){
-        
+     public function show($id, Request $request){
+         return $this->postService->getPost($id,$request);
     }
      public function all(Request $request){
          return $this->postService->getAll();
