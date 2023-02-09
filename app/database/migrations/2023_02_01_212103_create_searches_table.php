@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_ralationships', function (Blueprint $table) {
+        Schema::create('searches', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id1');
-            $table->bigInteger('user_id2');
-            $table->string('type');   //block or family
+            $table->string('keyword')->nullable();
+            $table->integer('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_ralationships');
+        Schema::dropIfExists('searches');
     }
 };

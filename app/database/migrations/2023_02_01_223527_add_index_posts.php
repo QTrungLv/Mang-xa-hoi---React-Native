@@ -13,13 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('post_interacts', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('post_id');
-            $table->bigInteger('user_id');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        DB::statement('ALTER TABLE posts ADD FULLTEXT search1(content)');
     }
 
     /**
@@ -29,6 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_interacts');
+        DB::statement('ALTER TABLE posts DROP INDEX search1');
     }
 };
