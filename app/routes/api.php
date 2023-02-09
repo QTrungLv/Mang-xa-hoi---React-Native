@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\AuthSMSController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\SearchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,4 +41,9 @@ Route::prefix('post')->middleware('jwt.auth')->group(function () {
 Route::prefix('comment')->middleware('jwt.auth')->group(function () {
     Route::get('/{id}', [CommentController::class, 'show']);
     Route::post('store', [CommentController::class, 'store']);
+});
+Route::prefix('search')->middleware('jwt.auth')->group(function () {
+    Route::post('/', [SearchController::class, 'search']);
+    Route::get('/list', [SearchController::class, 'getList']);
+    Route::delete('delete', [SearchController::class, 'delete']);
 });

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->string('status')->default(0)->comment('0: no active; 1:active');
-            $table->rememberToken();
+            $table->rememberToken(500);
             $table->timestamps();
         });
     }

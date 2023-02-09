@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_relationships', function (Blueprint $table) {
+        Schema::create('searches', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id1');
-            $table->bigInteger('user_id2');
-            $table->tinyInteger('type')->nullable()->comment("0: family, 1: couple, 2: friend, 3: no_relationship, 4: block");
+            $table->string('keyword')->nullable();
+            $table->integer('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_relationships');
+        Schema::dropIfExists('searches');
     }
 };
