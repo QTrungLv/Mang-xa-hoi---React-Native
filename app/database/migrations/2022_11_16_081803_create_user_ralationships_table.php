@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_ralationships', function (Blueprint $table) {
+        Schema::create('user_relationships', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id1');
             $table->bigInteger('user_id2');

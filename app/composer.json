@@ -10,11 +10,11 @@
         "php": "^8.0.2",
         "fakerphp/faker": "^1.9.1",
         "guzzlehttp/guzzle": "^7.2",
-        "kreait/laravel-firebase": "^5.0",
         "laravel/framework": "^9.19",
         "laravel/passport": "^11.2",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "spatie/laravel-google-cloud-storage": "^2.1",
         "twilio/sdk": "^6.43",
         "tymon/jwt-auth": "dev-develop"
     },

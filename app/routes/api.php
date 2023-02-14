@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\RelationshipController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Api\AuthSMSController;
 use App\Http\Controllers\Api\CommentController;
@@ -36,7 +37,12 @@ Route::prefix('post')->group(function () {
     Route::post('/{id}/delete', [PostController::class, 'delete']);
     Route::post('/upload-file', [PostController::class, 'upload']);
 });
-
+Route::prefix('relation')->middleware('jwt.auth')->group(function () {
+    Route::get('/friends', [RelationshipController::class, 'getUserFriends']);
+    Route::get('/suggested', [RelationshipController::class, 'getListSuggestedFriends']);
+    Route::post('/request', [RelationshipController::class, 'setRequestFriend']);
+    Route::post('/block', [RelationshipController::class, 'getListBlocks']);
+});
 Route::prefix('comment')->middleware('jwt.auth')->group(function () {
     Route::get('/{id}', [CommentController::class, 'show']);
     Route::post('store', [CommentController::class, 'store']);
