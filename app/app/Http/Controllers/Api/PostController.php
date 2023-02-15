@@ -38,7 +38,6 @@ class PostController extends Controller
         return $this->postService->create($request);
     }
      public function update($id, Request $request){
-       
          return $this->postService->update($id, $request);
     }
     public function delete($id, Request $request){
@@ -48,11 +47,20 @@ class PostController extends Controller
          return $this->postService->getPost($id,$request);
     }
      public function all(Request $request){
-         return $this->postService->getAll();
+         return $this->postService->getAll($request);
     }
       public function listByUser(Request $request){
         $userId = $request->user_id;
          return $this->postService->getByUser($userId,$request);
+    }
+
+    public function getInfo($post_id) {
+        return $this->postService->getInfo($post_id);
+    }
+
+    public function likePost(Request $request, $post_id)
+    {
+        return $this->postService->likePost($request, $post_id);
     }
  
 }

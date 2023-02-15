@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('user_relationships', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('post_id');
-             $table->string('index');
-            $table->text('link');
-            $table->string('type'); //video or image
+            $table->bigInteger('user_id1');
+            $table->bigInteger('user_id2');
+            $table->tinyInteger('type')->nullable()->comment("0: family, 1: couple, 2: friend, 3: no_relationship, 4: block");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('user_relationships');
     }
 };

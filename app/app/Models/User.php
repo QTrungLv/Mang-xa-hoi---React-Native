@@ -66,7 +66,7 @@ class User extends Authenticatable implements JWTSubject
      * @return Attribute
      */
 
-    protected function username(): Attribute 
+    public function username(): Attribute 
     {
         // dd($this->getUserName($this->id));
         return Attribute::make(
@@ -93,5 +93,21 @@ class User extends Authenticatable implements JWTSubject
                 return $user->last_name;
             }
         }
+    }
+
+    public function posts()
+    {
+        return hasMany(Post::class);
+    }
+
+    public function checkBlock($user_id1, $user_id2) {  
+        $user_relationship = UserRelationship::where('user_id1', '=', $user_id1)
+            ->where('user_id2', '=', $user_id2)
+            ->orWhere('user_id1', '=', $user_id2)
+            ->where('user_id2', '=', $user_id1)
+            ->first();
+        if ($user_relationship->type == 3) 
+            return true;
+        return false; 
     }
 }

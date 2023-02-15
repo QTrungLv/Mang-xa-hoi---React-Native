@@ -13,14 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger('post_id');
-             $table->string('index');
-            $table->text('link');
-            $table->string('type'); //video or image
-            $table->timestamps();
-        });
+        DB::statement('ALTER TABLE posts ADD FULLTEXT search1(content)');
     }
 
     /**
@@ -30,6 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        DB::statement('ALTER TABLE posts DROP INDEX search1');
     }
 };
