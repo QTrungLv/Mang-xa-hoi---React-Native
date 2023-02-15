@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View, Image, Text, TextInput, Pressable, Alert, AsyncStorage } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View, Image, Text, TextInput, Pressable, Alert } from 'react-native';
 import { BASE_URL } from '../../Constrant';
 import { SignInContext } from '../../context/SignInContext';
 import facebookicon1 from '../../assets/icon/facebookicon.png'
@@ -7,9 +7,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { signIn } from '../../redux/actions/action'
 import Dialog from 'react-native-dialog';
-
-
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const mapDispatchToProps = (dispatch) => {
 
@@ -18,12 +16,6 @@ const mapDispatchToProps = (dispatch) => {
             console.log("Dispatch")
             dispatch(signIn(data))
         }
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-
     }
 }
 
@@ -68,27 +60,34 @@ function SignIn(props) {
 
 
     const handleSignIn = async () => {
-        // console.log("Start")
+        
+        console.log("Start")
+        props.navigation.navigate("Otp", { user_id: 1 })
         // const signInForm = {
         //     username: username,
         //     password: password
         // }
-        props.navigation.navigate("Otp", { user_id: 1 })
+
+        // try {
+        //     const response = await axios.post('http://10.0.2.2:8000/api/login', {
+        //         username: username,
+        //         password: password
+        //     })
+        //     saveUserToken(response.data.data.token)
+        //     props.signIn({ username: username, password: password })
+        //     props.navigation.navigate("Otp", { user_id: response.data.data.user_id })
+        // } catch (error) {
+        //     setDialog(response.data.message)
+        //     setShowDialog(true)
+        // }
+    }
+
+    const saveUserToken = async (token) => {
         try {
-            const response = await axios.post('http://10.0.2.2:8000/api/login', {
-                username: username,
-                password: password
-            })
-            console.log(response.data)
-            if (response.data.success) {
-                props.navigation.navigate("Otp", { user_id: response.user_id })
-            } else {
-                setDialog(response.data.message).
-                    setShowDialog(true)
-            }
+            await AsyncStorage.setItem("@UserToken", token)
+
         } catch (error) {
-            setDialog(response.data.message).
-                setShowDialog(true)
+            console.log(error)
         }
     }
 

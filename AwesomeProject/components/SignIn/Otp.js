@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, TextInput, Image, Pressable, StyleSheet, View } from 'react-native';
+import { SafeAreaView, Text, TextInput, Image, Pressable, StyleSheet, View, AsyncStorage } from 'react-native';
 import axios from 'axios';
 import Dialog from 'react-native-dialog';
+import { connect } from 'react-redux';
+import { getInfo } from '../../redux/actions/action';
 
-export default function Otp(props) {
+const mapDispatchToProps = (dispatch) => {
+
+    return {
+        getInfo: (data) => {
+            console.log("Dispatch - OTP")
+            dispatch(getInfo(data))
+        }
+    }
+}
+
+
+function Otp(props) {
 
     const user_id = props.route.params.user_id
 
@@ -19,20 +32,23 @@ export default function Otp(props) {
     }, [otp])
 
     const handleConfirm = async () => {
-        try {
-            const response = await axios.post("http://10.0.2.2:8000/api/", {
-                user_id: user_id,
-                otp: otp
-            })
-            if (response.data.success) {
-                props.navigation.navigate("Tab")
-            } else {
-                setDialog(response.data.message)
-                setShowDialog(true)
-            }
-        } catch (error) {
-            console.log(error)
-        }
+        props.getInfo({ name: "QuangTrung", avatarUrl: "Ha Noi", coverUrl: "Sai Gon", address: "Thai Nguyen" })
+        props.navigation.navigate("Tab")
+        // try {
+        //     const response = await axios.post("http://10.0.2.2:8000/api/otp", {
+        //         user_id: user_id,
+        //         otp: otp
+        //     })
+
+        //     await axios.post(/*Api get info user */ )
+
+        //     props.navigation.navigate("Tab")
+
+        // } catch (error) {
+
+        //     setDialog(response.data.message)
+        //     setShowDialog(true)
+        // }
 
     }
 
@@ -69,6 +85,9 @@ export default function Otp(props) {
         </SafeAreaView>
     )
 }
+
+export default connect(null, mapDispatchToProps)(Otp)
+
 
 const styles = StyleSheet.create({
     text1: {

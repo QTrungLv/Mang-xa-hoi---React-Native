@@ -19,6 +19,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthSMSController extends BaseController
 {
+    protected User $user;
     public function __construct()
     {
         $this->user = new User();
@@ -37,13 +38,12 @@ class AuthSMSController extends BaseController
         return $field;
     }
     public function login(Request $request)
-    {
+    { 
         try {
             $validated = Validator::make($request->all(), [
                 'username' => 'required',
                 'password' => 'required'
             ]);
-
             if ($validated->fails()) {
                 return $this->failValidator($validated);
             }
@@ -71,9 +71,11 @@ class AuthSMSController extends BaseController
                 throw new Exception('Sai thông tin đăng nhập!');
             }
             $token = JWTAuth::attempt($credentials);
-            $customer->update(['remember_token' => $token]);
+            $customer->remember_token = $token;
+            $customer->save();
             $verificationOTP = VerificationLogin::where('user_id', $customer->id)->latest()->first();
             $now = Carbon::now();
+           
             if ($verificationOTP && $now->isBefore($verificationOTP->expire_at)) {
                 $this->sendOTP($typeinput, $request->username, $verificationOTP->otp);
             } else {
@@ -188,7 +190,7 @@ class AuthSMSController extends BaseController
                 return $this->withSuccessMessage('Kích hoạt tài khoản thành công!');
             } else {
                 $token = $user->remember_token;
-                return $this->responseWithToken($token);
+                return $this->responseWithToken($token, $user);
             }
         }
         return $this->sendError("Xác thực không thành công!");
@@ -303,9 +305,9 @@ class AuthSMSController extends BaseController
         ];
         Mail::to($email)->send(new MailOTP($details));
     }
-    public function responseWithToken($token)
+    public function responseWithToken($token, $user)
     {
-        $user = auth()->user();
+        // $user = auth()->user();
         $data = [
             'token' => $token,
             'user' => $user,

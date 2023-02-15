@@ -18,7 +18,7 @@ const OtpSignUp = ({ route, navigation }) => {
   const [message, setMessage] = useState('Đã xảy ra lỗi');
   const [visible, setVisible] = useState(false);
 
-  const handlerSignUp = async () => {
+  const handleSignUp = async () => {
     console.log(user_id);
     try {
       const response = await axios.post('http://10.0.2.2:8000/api/otp', {
@@ -32,6 +32,7 @@ const OtpSignUp = ({ route, navigation }) => {
       setMessage(error.response.data.message);
     }
     setVisible(true);
+    navigation.navigate("SignIn")
   };
 
   return (
@@ -51,13 +52,13 @@ const OtpSignUp = ({ route, navigation }) => {
           }}
           style={styles.input}
         />
-        <TouchableOpacity style={styles.button} onPress={handlerSignUp}>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.textInButton}>Continue</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bot}>
         <Text style={styles.forgot}>Need help?</Text>
-        <Text style={styles.signup}>Sign Up</Text>
+        <Text style={styles.signup} onPress={() => navigation.navigate("SignIn")}>Sign In</Text>
       </View>
       <Dialog.Container visible={visible}>
         <Dialog.Title> Thông tin</Dialog.Title>

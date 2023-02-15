@@ -1,5 +1,5 @@
 // Import React
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // Import core components
 import {
     StyleSheet,
@@ -43,6 +43,11 @@ export default function Example() {
         //     alert('Please Select File first');
         // }
     };
+    const [data, setData] = useState()
+    //useEffect(function, [var, let])
+    useEffect(() => {
+        //Call API GET  --> data --> setData() --> return(---)
+    }, [])
 
     const selectFile = async () => {
         // Opening Document Picker to select one file

@@ -40,6 +40,12 @@ export default function Redirect({ navigation }) {
                     Report Post
                 </Text>
             </Pressable>
+            <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "blue" : "white" }, styles.button]}
+                onPress={() => navigation.navigate("PersonalPage")}>
+                <Text>
+                    Personal Page
+                </Text>
+            </Pressable>
         </ScrollView>
     )
 }

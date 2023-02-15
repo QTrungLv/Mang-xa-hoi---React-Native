@@ -9,29 +9,15 @@
 
 
 1. Task
-Dang nhap,
-Dang ki,
-Xoa bai, 
-Sua bai, 
-Bao cao bai, 
-Xem binh luan, 
-<<Trang chu>>, 
-Tab thong bao,
-Tab cai dat, 
-Tim kiem,
-Trang nguoi dung,
-Trang nhan tin,
+Trang chu:
+Tab ban be
+Tab thong bao
+Tab Chat
+Tab Cai dat
 
-<<Logic chua co >>
+Giao dien phu:
+Doi mat khau
+Cai dat thong bao
+Chan nguoi dung
 
-
-Note:
-1.Video for post.js
-2.MakePost.js make a bottom sheet de luu du lieu bai post
-3. EditPost.js make a dialog to confirm luu post moi
-4. EditPost.js make a dialog truoc khi lui lai
-5. MakePost.js chen anh tu thu muc trong may
-6. MakePost.js sap xep anh theo so luong
-7. MakePost.js chen duong lien ket
-8. MakePost.js chen Video
-9. Sau khi sua MakePost.js --> Copy vao EditPost
+https://app.diagrams.net/#G1PFgVgIbewRDeCRO77uW6CufcC84sqaJ9

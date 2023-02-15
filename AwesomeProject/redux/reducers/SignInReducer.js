@@ -12,7 +12,6 @@ export default function SignInReducer(state = intialState, action) {
                 user: newUser,
             }
         default: {
-            console.log("Default - SI")
             return state
         }
     }

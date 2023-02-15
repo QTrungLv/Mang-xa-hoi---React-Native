@@ -133,7 +133,7 @@ export default function MakePost({ navigation }) {
                 >
                     <Image source={goBack} style={styles.iconGoBack} />
                 </Pressable>
-                <Text style={styles.headerText}>Tạo bài viết</Text>
+                <Text style={styles.headerText}>Tạofffffffgf bài viết</Text>
                 {postButtonDisabled ?
                     <Pressable
                         onPress={() => { handlerPost }}
@@ -181,23 +181,12 @@ export default function MakePost({ navigation }) {
                 }}
             /> : <></>
             } */}
-            
 
-            <Pressable style={styles.button}>
-                <Image source={imageicon} style={styles.iconButton} />
-                <Text style={styles.textButton}>Cảm xúc</Text>
-            </Pressable>
+
+            
             <Pressable style={styles.button} onPress={selectImage}>
                 <Image source={imageicon} style={styles.iconButton} />
                 <Text style={styles.textButton}>Thêm hình ảnh</Text>
-            </Pressable>
-            <Pressable style={styles.button}>
-                <Image source={imageicon} style={styles.iconButton} />
-                <Text style={styles.textButton}>Thêm video</Text>
-            </Pressable>
-            <Pressable style={styles.button}>
-                <Image source={imageicon} style={styles.iconButton} />
-                <Text style={styles.textButton}>Chèn liên kết</Text>
             </Pressable>
 
 
