@@ -36,37 +36,6 @@ export default function MakePost({ navigation }) {
 
     const refRBSheet = useRef()
 
-    // const selectFile = async () => {
-    //     // Opening Document Picker to select one file
-    //     try {
-    //         const res = await DocumentPicker.pick({
-    //             // Provide which type of file you want user to pick
-    //             type: [DocumentPicker.types.allFiles],
-    //             // There can me more options as well
-    //             // DocumentPicker.types.allFiles
-    //             // DocumentPicker.types.images
-    //             // DocumentPicker.types.plainText
-    //             // DocumentPicker.types.audio
-    //             // DocumentPicker.types.pdf
-    //         });
-    //         // Printing the log realted to the file
-    //         console.log('res : ' + JSON.stringify(res));
-    //         // Setting the state to show single file attributes
-    //         setSingleFile(res);
-    //     } catch (err) {
-    //         setSingleFile(null);
-    //         // Handling any exception (If any)
-    //         if (DocumentPicker.isCancel(err)) {
-    //             // If user canceled the document selection
-    //             alert('Canceled');
-    //         } else {
-    //             // For Unknown Error
-    //             alert('Unknown Error: ' + JSON.stringify(err));
-    //             throw err;
-    //         }
-    //     }
-    // };
-
     const selectImage = () => {
         const options = {
             maxWidth: 2000,
@@ -133,7 +102,7 @@ export default function MakePost({ navigation }) {
                 >
                     <Image source={goBack} style={styles.iconGoBack} />
                 </Pressable>
-                <Text style={styles.headerText}>Tạofffffffgf bài viết</Text>
+                <Text style={styles.headerText}>Tạo bài viết</Text>
                 {postButtonDisabled ?
                     <Pressable
                         onPress={() => { handlerPost }}
@@ -151,7 +120,7 @@ export default function MakePost({ navigation }) {
                     <Image style={styles.avatarImage} source={avatar} />
                     <View style={styles.personalPost}>
                         <Text style={styles.namePost}>Quang Trung</Text>
-                        <Text style={styles.publicPost}>Public</Text>
+                        <Text style={styles.publicPost}>Công khai</Text>
                     </View>
                 </View>
                 <TextInput
@@ -164,30 +133,46 @@ export default function MakePost({ navigation }) {
                 />
             </View>
 
-            <View style={{ flexDirection: "row" }}>
-                {uriImage.map((item) => {
-                    return (
-                        <Image source={{ uri: item.uri }} style={{ width: 150, height: 150 }} key={item.key} />
-                    )
-                })}
-            </View>
-            {/* {
-                numOfPictures !== 0 ? <SectionList
-                contentContainerStyle={{ paddingHorizontal: 10 }}
-                stickySectionHeadersEnabled={false}
-                sections={uriImage}
-                renderItem={({ key, uri }) => {
-                    return <Image source={{ uri: uri }} style={{ width: 150, height: 150 }} key={key} />
-                }}
-            /> : <></>
-            } */}
+            {numOfPictures === 0 ? <></> : numOfPictures === 1 ? <Image style={{ width: 180, height: 180, margin: 4, alignSelf: "center"  }} source={uriImage[0]} />
+                : numOfPictures === 2 ?
+                    <View flexDirection="row" style={{ alignSelf: "center" }}>
+                        <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[0]} />
+                        <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[1]} />
+                    </View>
+                    : numOfPictures === 3 ?
+                        <View>
+                            <View flexDirection="row" style={{ alignSelf: "center" }}>
+                                <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[0]} />
+                                <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[1]} />
+                            </View>
+                            <Image style={{ width: 180, height: 180, margin: 4, alignSelf: "cemter" }} source={uriImage[2]} />
+                        </View>
+
+                        : numOfPictures === 4 ?
+                            <View>
+                                <View flexDirection="row" style={{ alignSelf: "center" }}>
+                                    <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[0]} />
+                                    <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[1]} />
+                                </View>
+                                <View flexDirection="row" style={{ alignSelf: "center" }}>
+                                    <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[2]} />
+                                    <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[3]} />
+                                </View>
+                            </View>
+
+                            : <></>
+
+            }
 
 
-            
             <Pressable style={styles.button} onPress={selectImage}>
                 <Image source={imageicon} style={styles.iconButton} />
                 <Text style={styles.textButton}>Thêm hình ảnh</Text>
             </Pressable>
+
+
+
+
 
 
             {/*Bottom Sheet*/}
@@ -270,7 +255,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: "white",
         width: "100%",
-        height: 100,
+        height: 60,
         textAlignVertical: "top",
         borderWidth: 0.5
 

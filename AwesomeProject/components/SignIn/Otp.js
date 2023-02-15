@@ -18,8 +18,9 @@ const mapDispatchToProps = (dispatch) => {
 
 function Otp(props) {
 
-    const user_id = props.route.params.user_id
 
+
+    const [id, setId] = useState("")
     const [otp, setOtp] = useState("")
     const [message, setMessage] = useState("")
     const [done, setDone] = useState(false)
@@ -30,26 +31,39 @@ function Otp(props) {
     useEffect(() => {
         if (otp.length !== 6) setMessage("* Otp phải có 6 kí tự")
     }, [otp])
-
+    useEffect(() => {
+        console.log("params: ", props.route.params.user_id)
+        setId(props.route.params.user_id)
+        console.log("Id: ", id)
+    }, [])
     const handleConfirm = async () => {
-        props.getInfo({ name: "QuangTrung", avatarUrl: "Ha Noi", coverUrl: "Sai Gon", address: "Thai Nguyen" })
-        props.navigation.navigate("Tab")
-        // try {
-        //     const response = await axios.post("http://10.0.2.2:8000/api/otp", {
-        //         user_id: user_id,
-        //         otp: otp
-        //     })
+        try {
+            await axios.post("http://10.0.2.2:8000/api/otp", {
+                user_id: id,
+                otp: otp
+            }).then((res) => {
+                console.log(res)
+                props.navigation.navigate("Tab")
+            })
 
-        //     await axios.post(/*Api get info user */ )
+            //saveUserToken(response.data.data.token)
 
-        //     props.navigation.navigate("Tab")
+        } catch (error) {
+            console.log(error)
+            setDialog(error.response.data.message)
+            setShowDialog(true)
+        }
 
-        // } catch (error) {
 
-        //     setDialog(response.data.message)
-        //     setShowDialog(true)
-        // }
+    }
 
+    const saveUserToken = async (token) => {
+        try {
+            await AsyncStorage.setItem("@UserToken", token)
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -74,6 +88,7 @@ function Otp(props) {
                         Xác nhận
                     </Text>
                 </Pressable>
+                <Text>UserId {id}</Text>
             </View>
             <Dialog.Container visible={showDialog}>
                 <Dialog.Title>Lỗi đăng nhập</Dialog.Title>

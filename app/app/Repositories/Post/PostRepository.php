@@ -23,14 +23,14 @@ class PostRepository extends AbstractRepository{
 			->where('user_id', $user->id)
 			->first();
 		$post = $this->model->find($post_id);
-		$relaytionship = UserRelationship::where('user_id1', '=', $post->user_id)
+		$relationship = UserRelationship::where('user_id1', '=', $post->user_id)
 			->where('user_id2', '=', $user->id)
 			->OrWhere('user_id1', '=', $user->id)
 			->where('user_id2', '=', $post->user_id)
 			->get();
-		if (isset($relaytionship->type))
+		if (isset($relationship->type))
 		{
-			if ($relaytionship->type == 3) return false; // type = block
+			if ($relationship->type == 3) return false; // type = block
 		} 
 		DB::beginTransaction();
 		try {

@@ -60,36 +60,34 @@ function SignIn(props) {
 
 
     const handleSignIn = async () => {
-        
-        console.log("Start")
-        props.navigation.navigate("Otp", { user_id: 1 })
-        // const signInForm = {
-        //     username: username,
-        //     password: password
-        // }
 
-        // try {
-        //     const response = await axios.post('http://10.0.2.2:8000/api/login', {
-        //         username: username,
-        //         password: password
-        //     })
-        //     saveUserToken(response.data.data.token)
-        //     props.signIn({ username: username, password: password })
-        //     props.navigation.navigate("Otp", { user_id: response.data.data.user_id })
+        const signInForm = {
+            username: username,
+            password: password
+        }
+
+        //try {
+        await axios.post('http://10.0.2.2:8000/api/login', {
+            username: username,
+            password: password
+        }).then((res) => {
+            console.log("data: ", res.data.data.id)
+            props.signIn({ username: username, password: password })
+            props.navigation.navigate("Otp", { user_id: res.data.data.id })
+        }).catch((err) => {
+            console.log(err)
+            setDialog(err.response.data.data.message)
+            setShowDialog(true)
+        })
+
+
         // } catch (error) {
         //     setDialog(response.data.message)
         //     setShowDialog(true)
         // }
     }
 
-    const saveUserToken = async (token) => {
-        try {
-            await AsyncStorage.setItem("@UserToken", token)
 
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     const handleCancel = () => {
         setShowDialog(false);

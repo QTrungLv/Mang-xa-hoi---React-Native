@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('post_id');
+             $table->string('index');
             $table->text('link');
             $table->string('type'); //video or image
             $table->timestamps();

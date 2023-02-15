@@ -1,4 +1,14 @@
-import React, { useRef } from 'react';
+import React from 'react';
+
+import { View } from 'react-native';
+
+import styled from 'styled-components/native';
+
+import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 const Container = styled.View`
   flex: 1;
@@ -81,6 +91,8 @@ const BottomDivider = styled.View`
   height: 9px;
   background: #f0f2f5;
 `;
+
+
 const ContainerAvatar = styled.View`
 	width: 40px;
 	height: 40px;
@@ -104,83 +116,94 @@ const UserActive = styled.View`
 	border-width: 2px;
 	border-color: #ffffff;
 `
-const Feed = ({ postDetails = null }) => {
-    const { username, time, postContent, likeCount, isLike, commentCount } =
-        postDetails;
+
+const Feed = ({ postDetails }) => {
+  const { username, time, postContent, likeCount, isLike, commentCount } =
+    postDetails;
+
+  const Avatar = ({ source, online, story }) => {
     return (
-        <>
-            <Container>
-                <Header>
-                    <Row>
-                        <Avatar source={require('../../assets/user3.jpg')} />
-                        <View style={{ paddingLeft: 10 }}>
-                            <User>{username}</User>
-                            <Row>
-                                <Time>{time}</Time>
-                                <Entypo name="dot-single" size={12} color="#747476" />
-                                <FontAwesome name="globe" size={10} color="#747476" />
-                            </Row>
-                        </View>
-                    </Row>
-
-                    <TouchableOpacity onPress={() => refRBSheet.current.open()}>
-                        <Entypo name="dots-three-horizontal" size={15} color="#222121" />
-                    </TouchableOpacity>
-                </Header>
-
-                <Post>{postContent}</Post>
-                <Photo source={require('../../assets/post3.jpg')} />
-
-                <Footer>
-                    <FooterCount>
-                        <Row>
-                            <IconCount>
-                                <AntDesign name="like1" size={12} color="#FFFFFF" />
-                            </IconCount>
-                            <TextCount>{likeCount} likes</TextCount>
-                        </Row>
-                        <TextCount>{commentCount} comments</TextCount>
-                    </FooterCount>
-
-                    <Separator />
-
-                    <FooterMenu>
-                        <Button>
-                            <Iconwrap>
-                                <AntDesign
-                                    name="like2"
-                                    size={20}
-                                    color={isLike ? '#6495ED' : '#424040'}
-                                />
-                            </Iconwrap>
-                            <Text>Like</Text>
-                        </Button>
-
-                        <Button>
-                            <Iconwrap>
-                                <MaterialCommunityIcons
-                                    name="comment-outline"
-                                    size={20}
-                                    color="#424040"
-                                />
-                            </Iconwrap>
-                            <Text>Comment</Text>
-                        </Button>
-
-                        <Button>
-                            <Iconwrap>
-                                <MaterialCommunityIcons
-                                    name="share-outline"
-                                    size={20}
-                                    color="#424040"
-                                />
-                            </Iconwrap>
-                            <Text>Share</Text>
-                        </Button>
-                    </FooterMenu>
-                </Footer>
-                <BottomDivider />
-            </Container>
-        </>
+      <ContainerAvatar>
+        <UserAvatar source={source} story={story} />
+        {online && <UserActive />}
+      </ContainerAvatar>
     )
-}
+  }
+
+  return (
+    <>
+      <Container>
+        <Header>
+          <Row>
+            <Avatar source={require('../../assets/user3.jpg')} />
+            <View style={{ paddingLeft: 10 }}>
+              <User>{username}</User>
+              <Row>
+                <Time>{time}</Time>
+                <Entypo name="dot-single" size={12} color="#747476" />
+                <FontAwesome name="globe" size={10} color="#747476" />
+              </Row>
+            </View>
+          </Row>
+
+          <Entypo name="dots-three-horizontal" size={15} color="#222121" />
+        </Header>
+
+        <Post>{postContent}</Post>
+        <Photo source={require('../../assets/post3.jpg')} />
+
+        <Footer>
+          <FooterCount>
+            <Row>
+              <IconCount>
+                <AntDesign name="like1" size={12} color="#FFFFFF" />
+              </IconCount>
+              <TextCount>{likeCount} likes</TextCount>
+            </Row>
+            <TextCount>{commentCount} comments</TextCount>
+          </FooterCount>
+
+          <Separator />
+
+          <FooterMenu>
+            <Button>
+              <Iconwrap>
+                <AntDesign
+                  name="like2"
+                  size={20}
+                  color={isLike ? '#6495ED' : '#424040'}
+                />
+              </Iconwrap>
+              <Text>Like</Text>
+            </Button>
+
+            <Button>
+              <Iconwrap>
+                <MaterialCommunityIcons
+                  name="comment-outline"
+                  size={20}
+                  color="#424040"
+                />
+              </Iconwrap>
+              <Text>Comment</Text>
+            </Button>
+
+            <Button>
+              <Iconwrap>
+                <MaterialCommunityIcons
+                  name="share-outline"
+                  size={20}
+                  color="#424040"
+                />
+              </Iconwrap>
+              <Text>Share</Text>
+            </Button>
+          </FooterMenu>
+        </Footer>
+        <BottomDivider />
+      </Container>
+    </>
+  );
+};
+
+export default Feed;
