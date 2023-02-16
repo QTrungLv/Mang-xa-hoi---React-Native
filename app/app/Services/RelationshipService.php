@@ -23,30 +23,35 @@ class RelationshipService extends BaseService{
             $friend = User::find($request->user_id);
             $infoUser=InfoUser::where('user_id',$request->user_id )->first();
             $relationship=DB::table('user_relationships')->where('user_id1',$user->id)->where('user_id2',$request->user_id)->first();
-            $data=[
-                'id'=>$friend->id,
-                'username'=>$friend->first_name.' '.$friend->last_name,
-                'avatar'=>$infoUser->avatar?$infoUser->avatar:'',
-                'same_friends'=>$mutualFriends,
-                'created'=>$relationship->created_at
-            ];
+            if($friend && $infoUser && $relationship){
+                $data=[
+                    'id'=>$friend->id,
+                    'username'=>$friend->first_name.' '.$friend->last_name,
+                    'avatar'=>$infoUser->avatar?$infoUser->avatar:'',
+                    'same_friends'=>$mutualFriends,
+                    'created'=>$relationship->created_at
+                ];
             return $this->sendResponse($data, "Thành công");
+            }
+           return $this->sendError(null, "Có lỗi xảy ra");
         }else{
             return $this->sendResponse(null, "Chính mình");;
         }
     }
     public function setAcceptFriend($request){
         $user=JWTAuth::toUser($request->token);
-        $data=['user_id1'=>$user->id, 'user_id2'=>$request->user_id,'type'=>$request->is_accept];
-        $userRelationship=$this->relationshipRepository->updateRelation($data);
-        if($userRelationship){
-           return $this->sendResponse($userRelationship, "Thành công");
+        if($user){
+            $data=['user_id1'=>$user->id, 'user_id2'=>$request->user_id,'type'=>$request->is_accept];
+            $userRelationship=$this->relationshipRepository->updateRelation($data);
+            if($userRelationship){
+            return $this->sendResponse($userRelationship, "Thành công");
+            }
         }
         return $this->sendError(null, "Có lỗi xảy ra");
     }
     public function getListSuggestedFriends($request){
          $user=JWTAuth::toUser($request->token);
-        $friends=$this->relationshipRepository->friends($user);
+         $friends=$this->relationshipRepository->friends($user);
          $listUsers=[];
          foreach($friends as $friend){
              $listUsers[]=[
@@ -70,9 +75,11 @@ class RelationshipService extends BaseService{
         }
     public function getListBlocks($request){
          $user=JWTAuth::toUser($request->token);
-         $listBlocks=DB::table('user_relationships')->where('user_id1', $user->id)->where('type',-1)->paginate(8);
-         if($listBlocks){
-            return $this->sendResponse($listBlocks->items(), "Thành công");
+         if($user){
+            $listBlocks=DB::table('user_relationships')->where('user_id1', $user->id)->where('type',-1)->paginate(8);
+            if($listBlocks){
+                return $this->sendResponse($listBlocks->items(), "Thành công");
+            }
          }
          return $this->sendError(null, "Có lỗi xảy ra");
     }

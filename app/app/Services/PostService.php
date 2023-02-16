@@ -186,17 +186,17 @@ class PostService extends BaseService{
         $is_liked = 0;
         if($userInteract){
             $is_liked = 1;
-        };
-        $data = [
-            'id' => $post->id,
-            'described' => $post->content,
-            'create'=>$post->created_at,
-            'modified'=>$post->updated_at,
-            'like' => $numberLike,
-            'comment' => $numberComment,
-            'is_liked' => $is_liked
-        ];
+        };        
         if($post){
+             $data = [
+                'id' => $post->id,
+                'described' => $post->content,
+                'create'=>$post->created_at,
+                'modified'=>$post->updated_at,
+                'like' => $numberLike,
+                'comment' => $numberComment,
+                'is_liked' => $is_liked
+           ];
               return $this->sendResponse($data, 'Thành công');
         }else{
             return $this->sendError(null, "Có lỗi xảy ra");
