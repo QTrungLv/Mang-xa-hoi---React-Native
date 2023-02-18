@@ -12,11 +12,14 @@ class RelationshipController extends Controller
     public function __construct(RelationshipService $relationshipService){
         $this->relationshipService = $relationshipService;
     }
-    public function getUserFriends(Request $request){
-       return $this->relationshipService->getUserFriends($request);
+    public function getFriends(Request $request){
+       return $this->relationshipService->getFriends($request);
     }
      public function setAcceptFriend(Request $request){
        return $this->relationshipService->setAcceptFriend($request);
+    }
+    public function getRequestedFriends(Request $request){
+       return $this->relationshipService->getRequestedFriends($request);
     }
      public function getListSuggestedFriends(Request $request){
        return $this->relationshipService->getListSuggestedFriends($request);

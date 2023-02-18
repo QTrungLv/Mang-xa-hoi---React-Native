@@ -202,3 +202,15 @@ const styles = StyleSheet.create({
     marginTop: 110,
   },
 });
+
+export default function SignUp(){
+    return(
+        <ScrollView>
+            <View>
+                <Text>
+                    Sign Up
+                </Text>
+            </View>
+        </ScrollView>
+    )
+}

@@ -11,6 +11,8 @@ class Image extends Model
     protected $fillable = [
         'post_id',
         'link',
+        'index',
+        'name',
         'type'
     ];
 }

@@ -301,7 +301,7 @@ class AuthSMSController extends BaseController
     {
         $details = [
             'title' => 'Mail xác thực danh tính',
-            'body' => 'Mã xác nhận của bạn là' . $otp,
+            'body' => 'Mã xác nhận của bạn là ' . $otp,
         ];
         Mail::to($email)->send(new MailOTP($details));
     }

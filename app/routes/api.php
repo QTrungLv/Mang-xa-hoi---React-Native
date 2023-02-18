@@ -29,18 +29,20 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthSMSController::class,'login'])->name("user.login");
 Route::post('/register', [AuthSMSController::class, 'register'])->name('user.register');
 Route::post('/otp', [AuthSMSController::class, 'authOTP']);
+Route::post('/post/upload-file', [PostController::class, 'upload']);
 Route::prefix('post')->middleware('jwt.auth')->group(function () {
     Route::get('/', [PostController::class, 'all']); //Tất cả bài viết
     Route::get('/{id}', [PostController::class, 'show']); // Chi tiết bài viết
     Route::post('/create', [PostController::class, 'create']); // Tạo bài viết
     Route::put('/{id}/update', [PostController::class, 'update']); // Cập nhật bài viết
     Route::post('/{id}/delete', [PostController::class, 'delete']); //Xóa bài viết
-    Route::post('/upload-file', [PostController::class, 'upload']);
     Route::get('/getInfo/{post_id}', [PostController::class, 'getInfo']);
     Route::post('/{post_id}/likePost', [PostController::class, 'likePost']); //Like bài viết
 });
 Route::prefix('relation')->middleware('jwt.auth')->group(function () {
-    Route::get('/friends', [RelationshipController::class, 'getUserFriends']);
+    Route::get('/friend', [RelationshipController::class, 'getFriend']);
+    Route::get('/friends', [RelationshipController::class, 'getFriends']);
+    Route::get('/requested', [RelationshipController::class, 'getRequestedFriends']);
     Route::post('/accept', [RelationshipController::class, 'setAcceptFriend']);
     Route::get('/suggested', [RelationshipController::class, 'getListSuggestedFriends']);
     Route::post('/request', [RelationshipController::class, 'setRequestFriend']);
