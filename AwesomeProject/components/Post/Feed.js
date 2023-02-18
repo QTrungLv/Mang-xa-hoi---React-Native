@@ -12,6 +12,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const Container = styled.View`
   flex: 1;
+  background: #fff
 `;
 const Header = styled.View`
   height: 50px;
@@ -116,7 +117,15 @@ const UserActive = styled.View`
 	border-width: 2px;
 	border-color: #ffffff;
 `
-
+//id 
+//name - string: Ten nguoi dung dang
+//image - array[string]: url cua hinh anh
+//described - string: Mieu ta
+//created - string: thoi gian dang
+//like - number: so luong like
+//comment - number: so comment
+//is_like - string: kiem tra da like
+//
 const Feed = ({ postDetails }) => {
   const { username, time, postContent, likeCount, isLike, commentCount } =
     postDetails;

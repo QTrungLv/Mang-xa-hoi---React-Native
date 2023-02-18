@@ -60,6 +60,7 @@ const Setting = (props) => {
         {token}
       </Text>
       <Text>{props.user.name}</Text>
+      
     </Pressable>
   )
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, TextInput, Image, Pressable, StyleSheet, View, AsyncStorage } from 'react-native';
+import { SafeAreaView, Text, TextInput, Image, Pressable, StyleSheet, View} from 'react-native';
 import axios from 'axios';
 import Dialog from 'react-native-dialog';
 import { connect } from 'react-redux';
 import { getInfo } from '../../redux/actions/action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const mapDispatchToProps = (dispatch) => {
 
@@ -42,11 +43,12 @@ function Otp(props) {
                 user_id: id,
                 otp: otp
             }).then((res) => {
-                console.log(res)
+                console.log("Token: ", res.data.data.token)
+                saveUserToken(res.data.data.token)
+
                 props.navigation.navigate("Tab")
             })
 
-            //saveUserToken(response.data.data.token)
 
         } catch (error) {
             console.log(error)
@@ -60,7 +62,7 @@ function Otp(props) {
     const saveUserToken = async (token) => {
         try {
             await AsyncStorage.setItem("@UserToken", token)
-
+            console.log(token)
         } catch (error) {
             console.log(error)
         }

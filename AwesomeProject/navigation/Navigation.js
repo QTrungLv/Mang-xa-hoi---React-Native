@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator()
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='SignIn' screenOptions={{ headerShown: true }} >
+            <Stack.Navigator initialRouteName='Redirect' screenOptions={{ headerShown: true }} >
 
                 <Stack.Screen name={"Redirect"} component={Redirect} />
                 <Stack.Screen name={"Auth"} component={Auth} />

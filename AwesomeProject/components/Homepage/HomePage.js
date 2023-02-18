@@ -10,7 +10,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet'
 import axios from 'axios';
 import Feed from '../Post/Feed';
@@ -44,7 +44,7 @@ const ContainerToolBar = styled.View`
   width: 100%;
   height: 92px;
 `;
-const RowToolBar = styled.View`
+const RowToolBar = styled.Pressable`
   flex-direction: row;
   background: #ffffff;
   width: 100%;
@@ -118,7 +118,7 @@ const UserActive = styled.View`
 `
 
 
-export default function HomePage() {
+export default function HomePage({ navigation }) {
 
   const refRBSheet = useRef();
 
@@ -155,17 +155,17 @@ export default function HomePage() {
 
   const ToolBar = () => {
     return (
-      <>
+      <View onPress={() => navigation.navigate("MakePost")}>
         <ContainerToolBar>
-          <RowToolBar>
+          <RowToolBar onPress={() => navigation.navigate("MakePost")}>
             <Avatar source={require('../../assets/user1.jpg')} />
-            <Input placeholder="What's on your mind?" />
+            <Input placeholder="What's on your mind?" onPress={() => navigation.navigate("MakePost")}/>
           </RowToolBar>
           <Divider />
           <RowToolBar>
             <Menu>
-              <Ionicons name="ios-videocam" size={22} color="#F44337" />
-              <MenuText>Live</MenuText>
+              <MaterialCommunityIcons name="post" size={22} color="#F44337" />
+              <MenuText onPress={() => {navigation.navigate("MakePost")}}>Make Post</MenuText>
             </Menu>
             <SeparatorToolBar />
 
@@ -179,18 +179,11 @@ export default function HomePage() {
             </Menu>
             <SeparatorToolBar />
 
-            <Menu>
-              <MaterialCommunityIcons
-                name="video-plus"
-                size={22}
-                color="#E141FC"
-              />
-              <MenuText>Room</MenuText>
-            </Menu>
+            
           </RowToolBar>
         </ContainerToolBar>
         <BottomDivider />
-      </>
+      </View>
     );
   };
 
@@ -210,7 +203,7 @@ export default function HomePage() {
 
   return (
 
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#F5FCFF" }}>
       <AppBar />
       <ToolBar />
       <Feed postDetails={{ username: "Quang Trung", time: "No", postContent: "Yes", likeCount: 3, isLike: true, commentCount: 10 }} />

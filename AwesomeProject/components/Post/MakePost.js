@@ -9,12 +9,15 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import DocumentPicker from 'react-native-document-picker';
-
+import axios from 'axios';
+import Dialog from 'react-native-dialog';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Header } from '../../utils/Header';
 
 export default function MakePost({ navigation }) {
-
+    const [showDialog, setShowDialog] = useState(false)
     const [havePost, setHavePost] = useState(false)
-
+    const [token, setToken] = useState("")
     // Post 
     const [description, setDecription] = useState("")
     const [uriImage, setUriImage] = useState([])
@@ -26,13 +29,7 @@ export default function MakePost({ navigation }) {
     const [postButtonDisabled, setPostButtonDisabled] = useState(false)
 
     //Form Data
-    let data = new FormData()
-    data.append('image',
-        {
-            uri: uriImage,
-            name: "",
-            type: ""
-        })
+
 
     const refRBSheet = useRef()
 
@@ -57,32 +54,52 @@ export default function MakePost({ navigation }) {
                 console.log(response);
 
                 setNumOfPictures(numOfPictures + 1)
-                console.log("numOfPicture ", numOfPictures)
-                const item = { key: numOfPictures, uri: response.assets[0].uri }
+                const item = { key: numOfPictures, uri: response.assets[0].uri, name: response.assets[0].fileName }
                 setUriImage([...uriImage, item]);
-                console.log(uriImage)
             }
         });
     };
 
-    const handlerPost = async () => {
+    const getToken = async () => {
         try {
-            //Call api
-            console.log("Post")
+            const value = await AsyncStorage.getItem("@UserToken")
+
+            if (value != null) {
+                setToken(value)
+                console.log("Value: ", value)
+            }
 
         } catch (error) {
             console.log(error)
         }
     }
 
+    const handlePost = async () => {
+        getToken()
+        const axios = Header(token)
+
+        await axios.post("http://10.0.2.2:8000/api/post/create", {
+            token: token,
+            described: description,
+            image: uriImage,
+            user_id: 3
+        }
+        )
+            .then((res) => {
+                console.log(res.data)
+
+            }).catch((err) => {
+                console.log(err)
+            })
+        //setShowDialog(true)
+
+
+    }
+
     //Note 2
     function handlerGoBack() {
         havePost ? refRBSheet.current.open() : navigation.goBack()
     }
-
-
-
-
 
     useEffect(() => {
         description ? setPostButtonDisabled(true) : setPostButtonDisabled(false)
@@ -92,6 +109,11 @@ export default function MakePost({ navigation }) {
         numOfPictures > 0 ? setPostButtonDisabled(true) : setPostButtonDisabled(false)
     }, [numOfPictures])
 
+    const handleCancel = () => {
+        setShowDialog(false)
+        navigation.popToTop()
+        navigation.navigate("Tab")
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -105,7 +127,7 @@ export default function MakePost({ navigation }) {
                 <Text style={styles.headerText}>Tạo bài viết</Text>
                 {postButtonDisabled ?
                     <Pressable
-                        onPress={() => { handlerPost }}
+                        onPress={handlePost}
                         style={({ pressed }) => [{ backgroundColor: pressed ? "#4267B2" : "#2196F3" }, styles.buttonPost]}
                     >
                         <Text style={[{ color: "#fff" }, styles.textButtonPost]}>ĐĂNG</Text>
@@ -133,7 +155,7 @@ export default function MakePost({ navigation }) {
                 />
             </View>
 
-            {numOfPictures === 0 ? <></> : numOfPictures === 1 ? <Image style={{ width: 180, height: 180, margin: 4, alignSelf: "center"  }} source={uriImage[0]} />
+            {numOfPictures === 0 ? <></> : numOfPictures === 1 ? <Image style={{ width: 180, height: 180, margin: 4, alignSelf: "center" }} source={uriImage[0]} />
                 : numOfPictures === 2 ?
                     <View flexDirection="row" style={{ alignSelf: "center" }}>
                         <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[0]} />
@@ -145,7 +167,7 @@ export default function MakePost({ navigation }) {
                                 <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[0]} />
                                 <Image style={{ width: 180, height: 180, margin: 4 }} source={uriImage[1]} />
                             </View>
-                            <Image style={{ width: 180, height: 180, margin: 4, alignSelf: "cemter" }} source={uriImage[2]} />
+                            <Image style={{ width: 180, height: 180, margin: 4, alignSelf: "center" }} source={uriImage[2]} />
                         </View>
 
                         : numOfPictures === 4 ?
@@ -191,14 +213,9 @@ export default function MakePost({ navigation }) {
                 }}
             >
                 <View style={{ height: 60, borderBottomWidth: 0.5 }}>
-                    <Text style={styles.bottomSheetTitleButton}>Bạn muốn hoàn thành bài viết sau?</Text>
-                    <Text style={{ marginLeft: 20 }}>Lưu bản nháp hoặc tiếp tục chỉnh sửa</Text>
+                    <Text style={styles.bottomSheetTitleButton}>Bạn muốn có muốn tiếp tục bài viết sau?</Text>
                 </View>
 
-                <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "#D9D9D9" : "white" }, styles.bottomSheetButton]} onPress={() => { }}>
-                    <Image source={drafticon} style={styles.buttomSheetIconButton} />
-                    <Text style={styles.buttomSheetTextButton}>Lưu làm bản nháp</Text>
-                </Pressable>
                 <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "#D9D9D9" : "white" }, styles.bottomSheetButton]} onPress={() => { }}>
                     <Image source={trashicon} style={styles.buttomSheetIconButton} />
                     <Text style={styles.buttomSheetTextButton}>Bỏ bài viết</Text>
@@ -209,7 +226,12 @@ export default function MakePost({ navigation }) {
                 </Pressable>
 
             </RBSheet>
-
+            <Dialog.Container visible={showDialog}>
+                <Dialog.Description>
+                    Bạn đã đăng bài thành công
+                </Dialog.Description>
+                <Dialog.Button label="OK" onPress={handleCancel} />
+            </Dialog.Container>
 
         </SafeAreaView>
 
