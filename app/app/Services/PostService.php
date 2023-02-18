@@ -92,7 +92,7 @@ class PostService extends BaseService{
                 if($params['image']){
                   $data = [];
                   $index=0;
-                  foreach ([$params['image']] as $image) {
+                  foreach ($params['image'] as $image) {
                         $index+=1;
                         $extension = $image->getClientOriginalExtension();
                         $file = now() . $image->getClientOriginalName() . '.' . $extension;
@@ -114,8 +114,12 @@ class PostService extends BaseService{
                     foreach ($params['image_del'] as $index) {
                         $image=Image::where('post_id',$id)->where('index',$index)->first();
                         if($bucket->object($image->name)){
-                            $checkDelete=$bucket->object($image->name)->delete();
                             $image->delete();
+                            try{
+                                $checkDelete=$bucket->object($image->name)->delete();
+                            }catch(Exception $e){
+                                 
+                            }
                         };
                     }
                }

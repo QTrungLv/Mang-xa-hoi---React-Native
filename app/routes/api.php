@@ -40,7 +40,9 @@ Route::prefix('post')->middleware('jwt.auth')->group(function () {
     Route::post('/{post_id}/likePost', [PostController::class, 'likePost']); //Like bài viết
 });
 Route::prefix('relation')->middleware('jwt.auth')->group(function () {
-    Route::get('/friends', [RelationshipController::class, 'getUserFriends']);
+    Route::get('/friend', [RelationshipController::class, 'getFriend']);
+    Route::get('/friends', [RelationshipController::class, 'getFriends']);
+    Route::get('/requested', [RelationshipController::class, 'getRequestedFriends']);
     Route::post('/accept', [RelationshipController::class, 'setAcceptFriend']);
     Route::get('/suggested', [RelationshipController::class, 'getListSuggestedFriends']);
     Route::post('/request', [RelationshipController::class, 'setRequestFriend']);
