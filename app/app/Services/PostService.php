@@ -24,7 +24,7 @@ class PostService extends BaseService{
         try {
             $post = $this->postRepository->create(['user_id' => $user->id, 'content' => $request->described ? $request->described : '']);
             if ($request->file('image')) {
-                $data = [];
+                $dataImage = [];
                 $index=0;
                 foreach ([$request->file('image')] as $image) {
                     $index+=1;
@@ -37,13 +37,13 @@ class PostService extends BaseService{
                     $url = $object->signedUrl(
                         $expiresAt = new \DateTime('2023-10-22'),
                     );
-                    $data[] = ['post_id' => $post->id,'index'=>$index, 'link' => $url, 'type' => 'Image'];
+                    $dataImage[] = ['post_id' => $post->id,'index'=>$index,'name'=>$user->id.'/Image/' .$post->id.'_'.$index.'.'.$extension, 'link' => $url, 'type' => 'Image'];               
                 }
-                Image::insert($data);
+                Image::insert($dataImage);
             }
             ;
-            if ($request->video) {
-                 $data = [];
+            if ($request->file('video')) {
+                 $dataVideo = [];
                  $index=0;
                 foreach ([$request->file('image')] as $image) {
                     $index+=1;
@@ -56,25 +56,25 @@ class PostService extends BaseService{
                     $url = $object->signedUrl(
                         $expiresAt = new \DateTime('2023-10-22')
                     );
-                    $data[] = ['post_id' => $post->id, 'link' => $url, 'type' => 'Video'];
+                    $dataVideo[] = ['post_id' => $post->id,'index'=>$index, 'link' => $url, 'type' => 'Video','name'=>$user->id.'/Video/' .$post->id.'_'.$index.'.'.$extension];
                 }
-                Image::insert($data);
+                Image::insert($dataVideo);
             }
             ;
             DB::commit();
+             $dataSend=['id'=>$post->id,'url'=>''];
+               return $this->sendResponse($dataSend, 'Thành công');
         }catch(Exception $e){
             DB::rollBack();
-        };
-        if($post){
-            $data=['id'=>$post->id,'url'=>''];
-            return $this->sendResponse($data, 'Thành công');
-        }else{
-           return $this->sendError(null, "Có lỗi xảy ra");
+            return $this->sendError(null, "Có lỗi xảy ra");
+
         };
     }
      public function delete($id,$request){
         $user = JWTAuth::toUser($request->token);
         $isSuccessful=$this->postRepository->delete($id);
+        Image::where('post_id',$id)->delete();
+        Comment::where('post_id',$id)->delete();
         if($isSuccessful){
             return $this->sendResponse($isSuccessful, '');
         }else{
@@ -82,6 +82,7 @@ class PostService extends BaseService{
         };
     }
      public function update($id,$request){
+        // dd($request->ip());  
         $params=$request->all();
          $bucket=app('firebase.storage')->getBucket();
         $user = JWTAuth::toUser($params['token']);
@@ -89,46 +90,63 @@ class PostService extends BaseService{
         DB::beginTransaction();
         try{
              $post->content = $params['described'];
-            if($params['image']){
+            if(array_key_exists('image', $params)){
+                if($params['image']){
                   $data = [];
                   $index=0;
-                foreach ([$params['image']] as $image) {
-                    $index+=1;
-                    $extension = $image->getClientOriginalExtension();
-                    $file = now() . $image->getClientOriginalName() . '.' . $extension;
-                    $uploadedfile = fopen($image, 'r');
-                    $object = $bucket->upload($uploadedfile, [
-                        'name' => $user->id.'/Image/' . $id.'_'.$index.'.'.$extension
-                    ]);
-                    $url = $object->signedUrl(
-                        $expiresAt = new \DateTime('2023-10-22'),
-                    );
-                    $data[] = ['post_id' => $post->id, 'link' => $url, 'type' => 'Image','index'=>$index];
-                }
-                Image::insert($data);
-            }
-            ;
-            if($params['image_del']){
-               foreach ($params['image_del'] as $index) {
-                    $bucket->object($user->id.'/Image/'.$id.'_'.$index)->delete();
+                  foreach ($params['image'] as $image) {
+                        $index+=1;
+                        $extension = $image->getClientOriginalExtension();
+                        $file = now() . $image->getClientOriginalName() . '.' . $extension;
+                        $uploadedfile = fopen($image, 'r');
+                        $object = $bucket->upload($uploadedfile, [
+                            'name' => $user->id.'/Image/' . $id.'_'.$index.'.'.$extension
+                        ]);
+                        $url = $object->signedUrl(
+                            $expiresAt = new \DateTime('2023-10-22'),
+                        );
+                        $data[] = ['post_id' => $post->id, 'link' => $url, 'type' => 'Image','index'=>$index, 'name'=> $user->id.'/Image/' . $id.'_'.$index.'.'.$extension];
+                    }
+                    Image::insert($data);
                 }
             }
             ;
-            if($params['video']){
+            if(array_key_exists('image_del',$params)){
+                if($params['image_del']){
+                    foreach ($params['image_del'] as $index) {
+                        $image=Image::where('post_id',$id)->where('index',$index)->first();
+                        if($bucket->object($image->name)){
+                            $image->delete();
+                            try{
+                                $checkDelete=$bucket->object($image->name)->delete();
+                            }catch(Exception $e){
+                                 
+                            }
+                        };
+                    }
+               }
+            }
+            ;
+
+            if(array_key_exists('video',$params)){
+                if($params['video']){
+
+                }
+            }
+            ;
+            if(array_key_exists('auto_block',$params)&&$params['auto_block']!=null){
 
             }
             ;
-            if($params['auto_block']!=null){
-
-            }
-            ;
-            if($params['auto_accept']!=null){
-
+            if(array_key_exists('auto_accept',$params)){
+                if($params['auto_accept']){
+                    
+                }
             }
             ;
             $post->save();
             DB::commit();
-            return $this->sendResponse($post, '');
+            return $this->sendResponse($post, 'Thành công');
         }catch(Exception $e){
             DB::rollBack();
         }
@@ -174,17 +192,17 @@ class PostService extends BaseService{
         $is_liked = 0;
         if($userInteract){
             $is_liked = 1;
-        };
-        $data = [
-            'id' => $post->id,
-            'described' => $post->content,
-            'create'=>$post->created_at,
-            'modified'=>$post->updated_at,
-            'like' => $numberLike,
-            'comment' => $numberComment,
-            'is_liked' => $is_liked
-        ];
+        };        
         if($post){
+             $data = [
+                'id' => $post->id,
+                'described' => $post->content,
+                'create'=>$post->created_at,
+                'modified'=>$post->updated_at,
+                'like' => $numberLike,
+                'comment' => $numberComment,
+                'is_liked' => $is_liked
+           ];
               return $this->sendResponse($data, 'Thành công');
         }else{
             return $this->sendError(null, "Có lỗi xảy ra");
