@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Http\Resources\PostCollection;
+use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use App\Models\PostInteract;
 use App\Models\Image;
@@ -156,23 +157,8 @@ class PostService extends BaseService{
          $params = $request->all();
         $user = JWTAuth::toUser($params['token']);
          $listPosts= $this->postRepository->all();
-         $data=['post'=>[]];
-         foreach($listPosts as $post){
-            $images=Image::where('post_id',$post['id'])->where('type','Image')->get();
-            $videos=Image::where('post_id',$post['id'])->where('type','Video')->get();
-            $numberLike = PostInteract::where('post_id', '=', $post['id'])->count();
-            $numberComment = Comment::where('post_id', '=', $post['id'])->count();
-            $userInteract= PostInteract::where('post_id', '=',$post['id'])->where('user_id','=', $user->id)->first();
-            $is_liked = 0;
-            if($userInteract){
-                $is_liked = 1;
-            };
-            $data['post'][]=['id'=>$post['id'],'name'=>'Không có','image'=>$images,'video'=>$videos,'described'=>$post['content'],
-            'like'=>$numberLike, 'comment'=>$numberComment, 'is_liked'=>$is_liked, 'is_blocked'=>0
-        ];
-         }
-         if($data){
-            return $this->sendResponse( $data, 'Thành công');
+         if($listPosts){
+            return $this->sendResponse( new PostCollection($listPosts), 'Thành công');
          }
         return $this->sendError( null, 'Có lỗi xảy ra');
     }
@@ -186,32 +172,17 @@ class PostService extends BaseService{
         $params = $request->all();
         $user = JWTAuth::toUser($params['token']);
         $post = $this->postRepository->find($id);
-        $numberLike = PostInteract::where('post_id', '=', $id)->count();
-        $numberComment = Comment::where('post_id', '=', $id)->count();
-        $userInteract= PostInteract::where('post_id', '=', $id)->where('user_id','=', $user->id)->first();
-        $is_liked = 0;
-        if($userInteract){
-            $is_liked = 1;
-        };        
         if($post){
-             $data = [
-                'id' => $post->id,
-                'described' => $post->content,
-                'create'=>$post->created_at,
-                'modified'=>$post->updated_at,
-                'like' => $numberLike,
-                'comment' => $numberComment,
-                'is_liked' => $is_liked
-           ];
-              return $this->sendResponse($data, 'Thành công');
-        }else{
-            return $this->sendError(null, "Có lỗi xảy ra");
-        }
+            return $this->sendResponse( new PostResource($post), 'Thành công');
+         }
+        return $this->sendError( null, 'Có lỗi xảy ra');
     }
         
-    public function getLike($postId){
+    public function getLike($postId, $user_id){
         $post = $this->postRepository->getLike($postId);
         $post = isset($post) ? $post : ['like' => 0];
+        $posts = $this->postRepository->find($postId);
+        $post['is_like'] = $posts->getLike($postId, $user_id);
         if ($post)
             return $this->sendResponse($post, 'Thành công');
         return $this->sendError(null, 'Có lỗi xảy ra');
@@ -220,14 +191,15 @@ class PostService extends BaseService{
     public function likePost($request, $post_id)
     {
         $post = $this->postRepository->likePost($request, $post_id);
-        if ($post)
-            return $this->getLike($post_id);
+        if ($post){
+            $user = JWTAuth::toUser($request['token']);
+            return $this->getLike($post_id, $user->id);
+        }
         return $this->sendError(null, 'Không thành công');
     }
 
     public function getPostByUser($user_id) {
         $posts = $this->postRepository->getPostByUser($user_id);
-        dd($posts[0]->getCountComment());
         if ($posts)
             return $this->sendResponse(new PostCollection($posts), 'Thành công');
          return $this->sendError(null, 'Có lỗi xảy ra');

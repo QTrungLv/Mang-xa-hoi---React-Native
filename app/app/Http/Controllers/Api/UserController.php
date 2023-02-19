@@ -18,4 +18,8 @@ class UserController extends Controller
     {
         return $this->userService->getInfo($id);
     }
+    public function logout()
+    {
+        return $this->userService->logout();
+    }
 }

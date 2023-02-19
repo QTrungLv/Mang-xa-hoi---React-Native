@@ -25,7 +25,7 @@ class CommentService extends BaseService{
         $user = JWTAuth::toUser($request->token);
         $comment = $this->commentRepository->store($request, $user->id);
         if ($comment) {
-             return $this->getComment($request->post_id);
+            return $this->getComment($request->post_id);
         }
         return $this->sendError(null, 'Có lỗi xảy ra');
     }

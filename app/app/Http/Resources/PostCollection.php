@@ -15,7 +15,7 @@ class PostCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection,
+            'post' => $this->collection,
             'pagination' => [
                 'total' => $this->total(),
                 'count' => $this->count(),

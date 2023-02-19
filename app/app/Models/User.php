@@ -103,11 +103,12 @@ class User extends Authenticatable implements JWTSubject
     public function checkBlock($user_id1, $user_id2) {  
         $user_relationship = UserRelationship::where('user_id1', '=', $user_id1)
             ->where('user_id2', '=', $user_id2)
-            ->orWhere('user_id1', '=', $user_id2)
-            ->where('user_id2', '=', $user_id1)
             ->first();
-        if ($user_relationship->type == 3) 
-            return true;
+        if ($user_relationship) {
+            if ($user_relationship->type == 4) 
+                return true;
+            return false;
+        }
         return false; 
     }
 
