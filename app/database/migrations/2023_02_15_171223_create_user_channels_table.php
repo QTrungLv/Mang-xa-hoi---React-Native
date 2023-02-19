@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('user_channels', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('channel_id');
+            // $table->foreign('channel_id')->references('id')->on('channels');
             $table->bigInteger('user_id');
-            $table->string('content');  
-            $table->string('status')->default('active');  //active:không thu hồi; not active:bị thu hồi
+            // $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('user_channels');
     }
 };

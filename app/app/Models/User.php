@@ -97,7 +97,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function posts()
     {
-        return hasMany(Post::class);
+        return $this->hasMany(Post::class);
     }
 
     public function checkBlock($user_id1, $user_id2) {  
@@ -109,5 +109,42 @@ class User extends Authenticatable implements JWTSubject
         if ($user_relationship->type == 3) 
             return true;
         return false; 
+    }
+
+    public function chats()
+    {
+        return $this->hasMany(Chat::class, 'user_id', 'id');
+    }
+
+    public function channels()
+    {
+        return $this->belongsToMany(Channel::class, 'user_channels', 'channel_id', 'user_id');
+    }
+
+    public function infoUser()
+    {
+        return $this->hasOne(InfoUser::class, 'user_id');
+    }
+    public function getCountFriend() {
+        $user = User::find($this->id);
+        $user_friend = UserRelationship::where('user_id1', $user->id)
+            ->orWhere('user_id2', $user->id)
+            ->where('type', '!=', 4)->count();
+        return $user_friend;
+    }
+
+    public function checkFriend($user_id) {
+        if ($user_id == $this->id) 
+            return false;
+        else {
+            $user_friend = UserRelationship::where('user_id1', '=', $user_id)
+            ->where('user_id2', '=', $this->id)
+            ->orWhere('user_id1', '=', $this->id)
+            ->where('user_id2', '=', $user_id)
+            ->first();
+            if (isset($user_friend->type) && $user_friend->type != 4) {
+                return true;
+            }
+        }
     }
 }

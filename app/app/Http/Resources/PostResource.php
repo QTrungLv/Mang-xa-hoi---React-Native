@@ -21,6 +21,7 @@ class PostResource extends JsonResource
             'like' => $this->post_interacts_count,
             'comment' => $this->comments_count,
             'is_liked' => $this->getLike($this->id, $user->id),
+            'content' => $this->content,
             'created' => $this->created_at,
             'author' => [
                 'id' => $this->user_id,

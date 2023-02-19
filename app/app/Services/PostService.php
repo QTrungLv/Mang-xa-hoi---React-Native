@@ -1,5 +1,7 @@
 <?php
 namespace App\Services;
+
+use App\Http\Resources\PostCollection;
 use App\Models\Comment;
 use App\Models\PostInteract;
 use App\Models\Image;
@@ -203,6 +205,14 @@ class PostService extends BaseService{
         if ($post)
             return $this->getLike($post_id);
         return $this->sendError(null, 'Không thành công');
+    }
+
+    public function getPostByUser($user_id) {
+        $posts = $this->postRepository->getPostByUser($user_id);
+        dd($posts[0]->getCountComment());
+        if ($posts)
+            return $this->sendResponse(new PostCollection($posts), 'Thành công');
+         return $this->sendError(null, 'Có lỗi xảy ra');
     }
 }
 ?>

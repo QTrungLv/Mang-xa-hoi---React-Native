@@ -62,5 +62,9 @@ class PostController extends Controller
     {
         return $this->postService->likePost($request, $post_id);
     }
+
+    public function getPostByUser($user_id) {
+        return $this->postService->getPostByUser($user_id);
+    }
  
 }

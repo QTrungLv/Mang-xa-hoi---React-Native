@@ -312,7 +312,7 @@ class AuthSMSController extends BaseController
             'token' => $token,
             'user' => $user,
             'token_type' => 'bearer',
-            'expires_in' => 60
+            'expires_in' => 360000060
         ];
         return $this->withData($data, 'Đăng nhập thành công', 200);
     }
