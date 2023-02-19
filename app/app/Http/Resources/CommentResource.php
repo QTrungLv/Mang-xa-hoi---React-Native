@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CommentResource extends JsonResource
 {
@@ -14,6 +15,7 @@ class CommentResource extends JsonResource
      */
     public function toArray($request)
     {
+        $user = JWTAuth::toUser($request->token);
         return [
             'id' => $this->id,
             'comment' => $this->content,
@@ -21,7 +23,9 @@ class CommentResource extends JsonResource
             'poster' => [
                 'id' => $this->user->id,
                 'username' => $this->user->username,
-            ]
+                'avatar' => $this->user->avatar,
+            ],
+            'is_blocked' => $this->user->checkBlock($user->id, $this->user_id) ? 1 : 0,
         ];
     }
 }
