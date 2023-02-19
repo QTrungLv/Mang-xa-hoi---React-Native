@@ -3,8 +3,9 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\RelationshipController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthSMSController;
+use App\Http\Controllers\Api\ChannelController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\SearchController;
 use Illuminate\Http\Request;
@@ -56,4 +57,15 @@ Route::prefix('search')->middleware('jwt.auth')->group(function () {
     Route::post('/', [SearchController::class, 'search']);
     Route::get('/list', [SearchController::class, 'getList']);
     Route::delete('delete', [SearchController::class, 'delete']);
+});
+Route::prefix('channel')->middleware('jwt.auth')->group(function () {
+    Route::get('/{id}', [ChannelController::class, 'getAll']); //gọi tất cả các channel chat của user có id =$id
+    Route::post('/create', [ChannelController::class, 'create']); // tạo một channel chat giữa 2 người khi click buuton nhắn tin lần đầu
+    Route::post('/sendMessage', [ChannelController::class, 'sendMessage']);
+    Route::get('/getChannel/{id}', [ChannelController::class, 'getChat']); // lấy danh sách tin nhắn của channel có id = $id
+});
+Route::prefix('personal')->middleware('jwt.auth')->group(function () {
+    Route::get('/getPost/{id}', [PostController::class, 'getPostByUser']); //lấy danh sách bài viết của user
+    Route::post('store', [CommentController::class, 'store']);
+    Route::get('/infoUser/{id}', [UserController::class, 'getInfo']); //info user
 });

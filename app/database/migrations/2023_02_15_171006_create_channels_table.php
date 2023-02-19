@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('channels', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('channel_id');
-            $table->bigInteger('user_id');
-            $table->string('content');  
-            $table->string('status')->default('active');  //active:không thu hồi; not active:bị thu hồi
+            $table->tinyInteger('is_block')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('channels');
     }
 };

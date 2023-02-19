@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(L_PostSeeder::class);
         $this->call(L_ImageSeeder::class);
         $this->call(L_RelationSeeder::class);
+        $this->call(ChannelSeeder::class);
+        $this->call(UserChannelSeeder::class);
     }
 }

@@ -42,5 +42,10 @@ class Post extends Model
         if ($post) return 1;
         return 0;
     }
+     public function getCountComment() {
+        $post = Post::find($this->id)
+        ->leftJoin('comments', 'comments.post_id', 'posts.id')->count();
+        return $post;
+     }
 
 }

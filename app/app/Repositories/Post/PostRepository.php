@@ -61,5 +61,10 @@ class PostRepository extends AbstractRepository{
 			->first();
 		return $post;
 	}
+
+	public function getPostByUser($user_id) {
+		$posts = Post::where('user_id', $user_id)->paginate();
+		return $posts;
+	}
 }
  ?>
