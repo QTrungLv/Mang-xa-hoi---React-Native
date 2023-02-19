@@ -14,6 +14,10 @@ import { View, ScrollView, TouchableOpacity, Pressable } from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet'
 import axios from 'axios';
 import Feed from '../Post/Feed';
+import { getToken } from '../../utils/Token';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const ContainerAppBar = styled.View`
   width: 100%;
   height: 58px;
@@ -121,10 +125,45 @@ const UserActive = styled.View`
 export default function HomePage({ navigation }) {
 
   const refRBSheet = useRef();
+  const [dataPost, setDataPost] = useState()
+  const [token, setToken] = useState("")
 
-  const getListPost = async () => {
-    await axios.post("")
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem("@UserToken")
+
+      if (value != null) {
+        setToken(value)
+        console.log("Value: ", value)
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+
+  useEffect(() => {
+
+    const getListPost = async () => {
+      //const axios = Headers(token)
+      let api = `http://10.0.2.2:8000/api/post/?token=${token}`
+      console.log(api)
+      await axios
+        .get(api)
+        .then((res) => {
+          setDataPost(res.data.data.post)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+    getToken()
+    getListPost()
+  }, [])
+
+
 
   const Avatar = ({ source, online, story }) => {
     return (
@@ -159,13 +198,13 @@ export default function HomePage({ navigation }) {
         <ContainerToolBar>
           <RowToolBar onPress={() => navigation.navigate("MakePost")}>
             <Avatar source={require('../../assets/user1.jpg')} />
-            <Input placeholder="What's on your mind?" onPress={() => navigation.navigate("MakePost")}/>
+            <Input placeholder="What's on your mind?" onPress={() => navigation.navigate("MakePost")} />
           </RowToolBar>
           <Divider />
           <RowToolBar>
             <Menu>
               <MaterialCommunityIcons name="post" size={22} color="#F44337" />
-              <MenuText onPress={() => {navigation.navigate("MakePost")}}>Make Post</MenuText>
+              <MenuText onPress={() => { navigation.navigate("MakePost") }}>Make Post</MenuText>
             </Menu>
             <SeparatorToolBar />
 
@@ -179,7 +218,7 @@ export default function HomePage({ navigation }) {
             </Menu>
             <SeparatorToolBar />
 
-            
+
           </RowToolBar>
         </ContainerToolBar>
         <BottomDivider />
@@ -206,7 +245,19 @@ export default function HomePage({ navigation }) {
     <ScrollView style={{ flex: 1, backgroundColor: "#F5FCFF" }}>
       <AppBar />
       <ToolBar />
-      <Feed postDetails={{ username: "Quang Trung", time: "No", postContent: "Yes", likeCount: 3, isLike: true, commentCount: 10 }} />
+
+      {
+        dataPost ? dataPost.map((item) => {
+          console.log(item)
+          return (
+            <View key={item.id}>
+              <Feed postDetails={item} />
+            </View>
+
+          )
+
+        }) : <></>
+      }
 
       <RBSheet
         ref={refRBSheet}

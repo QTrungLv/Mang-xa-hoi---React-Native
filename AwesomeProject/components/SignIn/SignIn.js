@@ -75,7 +75,8 @@ function SignIn(props) {
             props.signIn({ username: username, password: password })
             props.navigation.navigate("Otp", { user_id: res.data.data.id })
         }).catch((err) => {
-            setDialog(err.response.data.data.message)
+            console.log(err)
+            setDialog(err.response.data.message)
             setShowDialog(true)
         })
 

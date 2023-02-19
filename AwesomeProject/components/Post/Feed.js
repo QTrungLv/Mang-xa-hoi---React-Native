@@ -118,7 +118,7 @@ const UserActive = styled.View`
 	border-color: #ffffff;
 `
 //id 
-//name - string: Ten nguoi dung dang
+//name - string: Ten nguoi dung dang  
 //image - array[string]: url cua hinh anh
 //described - string: Mieu ta
 //created - string: thoi gian dang
@@ -127,8 +127,8 @@ const UserActive = styled.View`
 //is_like - string: kiem tra da like
 //
 const Feed = ({ postDetails }) => {
-  const { username, time, postContent, likeCount, isLike, commentCount } =
-    postDetails;
+  const { name, image, video, described, like, comment, is_liked, is_block } = postDetails;
+  console.log("Link: ", image[0].link)
 
   const Avatar = ({ source, online, story }) => {
     return (
@@ -146,20 +146,20 @@ const Feed = ({ postDetails }) => {
           <Row>
             <Avatar source={require('../../assets/user3.jpg')} />
             <View style={{ paddingLeft: 10 }}>
-              <User>{username}</User>
-              <Row>
+              <User>{name}</User>
+              {/* <Row>
                 <Time>{time}</Time>
                 <Entypo name="dot-single" size={12} color="#747476" />
                 <FontAwesome name="globe" size={10} color="#747476" />
-              </Row>
+              </Row> */}
             </View>
           </Row>
 
           <Entypo name="dots-three-horizontal" size={15} color="#222121" />
         </Header>
 
-        <Post>{postContent}</Post>
-        <Photo source={require('../../assets/post3.jpg')} />
+        <Post>{described}</Post>
+        {image[0] ? <Photo source={{uri: image[0].link}} /> : <></>}
 
         <Footer>
           <FooterCount>
@@ -167,9 +167,9 @@ const Feed = ({ postDetails }) => {
               <IconCount>
                 <AntDesign name="like1" size={12} color="#FFFFFF" />
               </IconCount>
-              <TextCount>{likeCount} likes</TextCount>
+              <TextCount>{like} likes</TextCount>
             </Row>
-            <TextCount>{commentCount} comments</TextCount>
+            <TextCount>{comment} comments</TextCount>
           </FooterCount>
 
           <Separator />
@@ -180,7 +180,7 @@ const Feed = ({ postDetails }) => {
                 <AntDesign
                   name="like2"
                   size={20}
-                  color={isLike ? '#6495ED' : '#424040'}
+                  color={is_liked ? '#6495ED' : '#424040'}
                 />
               </Iconwrap>
               <Text>Like</Text>
@@ -212,6 +212,7 @@ const Feed = ({ postDetails }) => {
         <BottomDivider />
       </Container>
     </>
+
   );
 };
 

@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-const SignUp = ({navigation}) => {
+const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
@@ -21,7 +21,7 @@ const SignUp = ({navigation}) => {
   const [errorconfirmedpassword, setErrorConfirmedPassword] = useState('');
 
   return (
-    <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+    <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
       <View>
         <View style={styles.top}>
           <Text style={styles.signup}>Sign Up</Text>
@@ -83,8 +83,8 @@ const SignUp = ({navigation}) => {
             confirmedPassword.length === 0
               ? setErrorConfirmedPassword('Vui lòng điền vào trường này')
               : confirmedPassword === password
-              ? setErrorConfirmedPassword('Confirmed password match')
-              : setErrorConfirmedPassword('Confirmed password not match');
+                ? setErrorConfirmedPassword('Confirmed password match')
+                : setErrorConfirmedPassword('Confirmed password not match');
           }}
           hidden
         />
@@ -202,15 +202,3 @@ const styles = StyleSheet.create({
     marginTop: 110,
   },
 });
-
-export default function SignUp(){
-    return(
-        <ScrollView>
-            <View>
-                <Text>
-                    Sign Up
-                </Text>
-            </View>
-        </ScrollView>
-    )
-}

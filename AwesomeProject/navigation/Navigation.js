@@ -10,7 +10,6 @@ import MakePost from '../components/Post/MakePost';
 import Post from '../components/Post/Post';
 import ReportPost from '../components/Post/ReportPost';
 import Birthday from '../components/SignUp/Birthday';
-import OtpSignUp from '../components/SignUp/otp';
 import Auth from '../components/auth/Auth'
 import PersonPage from '../components/PersonalPage/PersonPage';
 import Feed from '../components/Post/Feed';
@@ -19,12 +18,11 @@ const Stack = createNativeStackNavigator()
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Redirect' screenOptions={{ headerShown: true }} >
+            <Stack.Navigator initialRouteName='Tab' screenOptions={{ headerShown: true }} >
 
                 <Stack.Screen name={"Redirect"} component={Redirect} />
                 <Stack.Screen name={"Auth"} component={Auth} />
                 <Stack.Screen name={"Otp"} component={Otp} /*options={{ headerShow: false }}*/ />
-                <Stack.Screen name={"OtpSignUp"} component={OtpSignUp} /*options={{ headerShow: false }}*/ />
                 <Stack.Screen name={"SignIn"} component={SignIn} options={{ headerShown: false }} />
                 <Stack.Screen name={"MakePost"} component={MakePost} options={{ headerShown: false }} />
                 <Stack.Screen name={"SignUp"} component={SignUp} />

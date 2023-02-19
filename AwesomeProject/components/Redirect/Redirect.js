@@ -35,21 +35,9 @@ export default function Redirect({ navigation }) {
                 </Text>
             </Pressable>
             <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "blue" : "white" }, styles.button]}
-                onPress={() => navigation.navigate("ReportPost")}>
-                <Text>
-                    Report Post
-                </Text>
-            </Pressable>
-            <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "blue" : "white" }, styles.button]}
                 onPress={() => navigation.navigate("PersonalPage")}>
                 <Text>
                     Personal Page
-                </Text>
-            </Pressable>
-            <Pressable style={({ pressed }) => [{ backgroundColor: pressed ? "blue" : "white" }, styles.button]}
-                onPress={() => navigation.navigate("Feed")}>
-                <Text>
-                    Feed
                 </Text>
             </Pressable>
         </ScrollView>
