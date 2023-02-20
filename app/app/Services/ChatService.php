@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Http\Resources\ChatCollection;
 use App\Http\Resources\CommentCollection;
+use App\Models\Chat;
+use App\Repositories\Chat\ChatRepository;
 use App\Repositories\Comment\CommentRepository;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -14,8 +16,7 @@ class ChatService extends BaseService{
     
     public function getChat($channel_id)
     {
-        $chats = Chat::where('channel_id', '=', $channel_id)
-            ->paginate();
+        $chats = $this->chatRepository->getChat($channel_id);
         if ($chats) {
             return $this->sendResponse(new ChatCollection($chats), 'Thành công');
         }
@@ -31,7 +32,7 @@ class ChatService extends BaseService{
         ]);
         if ($chat) {
             $chats = $this->chatRepository->getChat($request->channel_id);
-            return sendResponse(new ChatCollection($chats), 'Thành công');
+            return $this->sendResponse(new ChatCollection($chats), 'Thành công');
         }
         return $this->sendError(null, 'Có lỗi xảy ra');
     }

@@ -21,4 +21,8 @@ class ChannelController extends Controller
     public function getAll($id){
         return $this->channelService->getAll($id);
     }
+
+    public function getChat($id) {
+        return $this->channelService->getChat($id);
+    }
 }

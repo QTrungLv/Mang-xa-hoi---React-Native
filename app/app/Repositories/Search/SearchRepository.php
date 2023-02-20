@@ -3,6 +3,7 @@ namespace App\Repositories\Search;
 
 use App\Models\Post;
 use App\Models\Search;
+use App\Models\User;
 use App\Repositories\AbstractRepository;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -23,7 +24,7 @@ class SearchRepository extends AbstractRepository{
         if (!is_null($request->keyword)) {
             $this->model::create([
                 'keyword' => $request->keyword,
-                'user_id' => isset($request->user_id) ? $request->user_id : $user,
+                'user_id' => isset($request->user_id) ? $request->user_id : $user->id,
             ]);
             $keyword = explode(' ', preg_replace('/\s+/', ' ', $request->keyword));
             $keyword = implode(',', $keyword);
@@ -77,6 +78,27 @@ class SearchRepository extends AbstractRepository{
             $flag =  false;
         }
         return $flag;
+    }
+
+    public function searchUser($request) 
+    {
+        $user = JWTAuth::toUser($request->token);
+        if (!is_null($request->keyword)) {
+            $this->model::create([
+                'keyword' => $request->keyword,
+                'user_id' => isset($request->user_id) ? $request->user_id : $user->id,
+            ]);
+            $keyword = explode(' ', preg_replace('/\s+/', ' ', $request->keyword));
+            $keyword = implode(',', $keyword);
+            $data = User::whereRaw('match(first_name, last_name) against(?)', array($keyword))
+               ->leftJoin('user_relationships', 'user_relationships.user_id1', 'users.id')
+               ->select('users.*', DB::raw('ifnull(user_relationships.type, 3) as type'))
+               ->orderBy('user_relationships.type', 'asc')
+            ->paginate();
+            return $data;
+        }
+        return null;
+
     }
 }
  ?>

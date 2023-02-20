@@ -30,4 +30,13 @@ class RelationshipController extends Controller
     public function getListBlocks(Request $request){
        return $this->relationshipService->getListBlocks($request);
     }
+    public function block(Request $request)
+    {
+      return $this->relationshipService->block($request);
+    }
+
+    public function unblock(Request $request)
+    {
+      return $this->relationshipService->unblock($request);
+    }
 }

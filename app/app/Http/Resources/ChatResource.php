@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -20,10 +21,10 @@ class ChatResource extends JsonResource
             'author'=> [
                 'name' => $this->user->username,
                 'id' =>$this->user_id,
-                'avatar' => isset($this->user->avatar) ? $this->user->avatar : null,
+                'avatar' => isset($this->user->infoUser->avatar) ? $this->user->infoUser->avatar : null,
             ],
             'content' => $this->content,
-            'created_at' => $this->created_at,
+            'created_at' => Carbon::parse($this->created_at)->toDateTimeString(),
             'is_author' => ($user->id == $this->user_id) ? 1 : 0,
         ];
     }

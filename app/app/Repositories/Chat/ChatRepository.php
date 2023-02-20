@@ -20,8 +20,9 @@ class ChatRepository extends AbstractRepository{
 	}
 
     public function getChat($channel_id) {
-        return Chat::where('channel_id' , '=', $channel_id)
-            ->paginate();
+        $query = Chat::where('channel_id' , '=', $channel_id)
+            ->orderBy('id', 'desc');
+        return $query->paginate(20);
     } 
     
 

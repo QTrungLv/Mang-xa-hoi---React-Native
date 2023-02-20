@@ -29,7 +29,7 @@ class PostResource extends JsonResource
             'author' => [
                 'id' => $this->user_id,
                 'username' => $this->user->username,
-                'avatar' => $this->user->avatar,
+                'avatar' => isset($this->user->infoUser->avatar) ? $this->user->infoUser->avatar : null,
             ],
             'is_blocked' => $this->user->checkBlock($user->id, $this->user_id) ? 1 : 0,
             'can_edit' =>($this->user_id == $user->id) ? 1: 0, 
