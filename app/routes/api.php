@@ -50,6 +50,8 @@ Route::prefix('relation')->middleware('jwt.auth')->group(function () {
     Route::get('/suggested', [RelationshipController::class, 'getListSuggestedFriends']);
     Route::post('/request', [RelationshipController::class, 'setRequestFriend']);
     Route::post('/block', [RelationshipController::class, 'getListBlocks']);
+    Route::post('/blockFriend', [RelationshipController::class, 'block']);
+    Route::post('/unblock', [RelationshipController::class, 'unblock']);
 });
 Route::prefix('comment')->middleware('jwt.auth')->group(function () {
     Route::get('/{id}', [CommentController::class, 'show']);
