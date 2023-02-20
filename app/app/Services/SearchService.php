@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Http\Resources\PostCollection;
 use App\Http\Resources\SearchCollection;
+use App\Http\Resources\UserCollection;
 use App\Repositories\Search\SearchRepository;
 
 class SearchService extends BaseService{
@@ -35,6 +36,15 @@ class SearchService extends BaseService{
         $search = $this->searchRepository->delete($request);
         if ($search) {
             return $this->sendResponse(null, 'Thành công');
+        }
+        return $this->sendError(null, 'Có lỗi xảy ra');
+    }
+
+    public function searchUser($request)
+    {
+        $user = $this->searchRepository->searchUser($request);
+        if ($user) {
+            return $this->sendResponse(new UserCollection($user), 'Thành công');
         }
         return $this->sendError(null, 'Có lỗi xảy ra');
     }

@@ -19,10 +19,12 @@ class ChannelResource extends JsonResource
         return [
             'channel_id' => $this->id,
             'receiver' =>[
+                'id' => $this->getReceiver($user->id)->id,
                 'username' => $this->getReceiver($user->id)->username,
-                'avatar' => isset($this->getReceiver($user->id)->avatar) ? $this->getReceiver($user->id)->avatar : null,
+                'avatar' => isset($this->getReceiver($user->id)->infoUser->avatar) ? $this->getReceiver($user->id)->infouser->avatar : null,
             ],
             'last_message' => !empty($this->getLastMessage()) ? new ChatResource($this->getLastMessage()) : null,
+            'is_block' => $this->is_block,
         ];
     }
 }

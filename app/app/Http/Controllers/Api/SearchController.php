@@ -28,4 +28,10 @@ class SearchController extends Controller
     {
         return $this->searchService->delete($request);
     }
+
+    public function searchUser(Request $request)
+    {
+        return $this->searchService->searchUser($request);
+    }
+
 }

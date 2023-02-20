@@ -18,13 +18,13 @@ class ChannelService extends BaseService{
             ->where('user_id2', '=', $request->user_id2)
             ->first();
         $is_block =0;
-        if ($relation->type == 4)
+        if (isset($relation->type) && $relation->type == 4)
             $is_block =1;
         $channel = Channel::create([
             'is_block' => $is_block,
         ]);
         if ($channel) {
-            $channel->users->attach([$request->user_id1, $request->user_id2]);
+            $channel->users()->attach([$request->user_id1, $request->user_id2]);
             return $this->sendResponse(null, 'Thành công');
         }
         return $this->sendError(null, 'Có lỗi xảy ra');
