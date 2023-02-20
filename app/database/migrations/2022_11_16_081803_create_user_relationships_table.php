@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id1');
             $table->bigInteger('user_id2');
-            $table->tinyInteger('type')->nullable()->comment("0: family, 1: couple, 2: friend, 3: no_relationship, 4: block");
+            $table->tinyInteger('type')->default(3)->comment("0: family, 1: couple, 2: friend, 3: no_relationship, 4: block");
+            $table->tinyInteger('status')->default(1)->comment("0: no accept, 1: accecpt");
             $table->timestamps();
             $table->softDeletes();
         });

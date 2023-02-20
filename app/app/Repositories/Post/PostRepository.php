@@ -25,12 +25,10 @@ class PostRepository extends AbstractRepository{
 		$post = $this->model->find($post_id);
 		$relationship = UserRelationship::where('user_id1', '=', $post->user_id)
 			->where('user_id2', '=', $user->id)
-			->OrWhere('user_id1', '=', $user->id)
-			->where('user_id2', '=', $post->user_id)
 			->get();
 		if (isset($relationship->type))
 		{
-			if ($relationship->type == 3) return false; // type = block
+			if ($relationship->type == 4) return false; // type = block
 		} 
 		DB::beginTransaction();
 		try {
@@ -60,6 +58,15 @@ class PostRepository extends AbstractRepository{
 			->groupBy('post_interacts.user_id')
 			->first();
 		return $post;
+	}
+
+	public function getPostByUser($user_id) {
+		$posts = Post::where('user_id', $user_id)->orderBy('id', 'desc')->paginate();
+		return $posts;
+	}
+
+	public function all() {
+		return $this->model->orderBy('id', 'desc')->paginate();
 	}
 }
  ?>

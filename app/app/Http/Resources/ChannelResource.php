@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class CommentResource extends JsonResource
+class ChannelResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,15 +17,12 @@ class CommentResource extends JsonResource
     {
         $user = JWTAuth::toUser($request->token);
         return [
-            'id' => $this->id,
-            'comment' => $this->content,
-            'created' => $this->created_at,
-            'poster' => [
-                'id' => $this->user->id,
-                'username' => $this->user->username,
-                'avatar' => $this->user->avatar,
+            'channel_id' => $this->id,
+            'receiver' =>[
+                'username' => $this->getReceiver($user->id)->username,
+                'avatar' => isset($this->getReceiver($user->id)->avatar) ? $this->getReceiver($user->id)->avatar : null,
             ],
-            'is_blocked' => $this->user->checkBlock($user->id, $this->user_id) ? 1 : 0,
+            'last_message' => !empty($this->getLastMessage()) ? new ChatResource($this->getLastMessage()) : null,
         ];
     }
 }

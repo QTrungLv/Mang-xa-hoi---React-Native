@@ -42,5 +42,22 @@ class Post extends Model
         if ($post) return 1;
         return 0;
     }
+    public function getCountComment() {
+        $cmt = Comment::where('post_id', '=', $this->id)->count();
+        return $cmt;
+     }
+
+     public function getCountLike() {
+        $like = PostInteract::where('post_id', '=', $this->id)->count();
+        return $like;
+     }
+
+     public function getImages() {
+        return Image::where('post_id', '=', $this->id)->where('type','Image')->get();
+     }
+    
+     public function getVideo() {
+        return Image::where('post_id','=', $this->id)->where('type','Video')->get();
+     }
 
 }
