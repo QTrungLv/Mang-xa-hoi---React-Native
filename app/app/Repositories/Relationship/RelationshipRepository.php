@@ -7,6 +7,8 @@ use App\Models\Comment;
 use App\Models\UserRelationship;
 use App\Repositories\AbstractRepository;
 use DB;
+use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RelationshipRepository extends AbstractRepository{
 
@@ -33,14 +35,69 @@ class RelationshipRepository extends AbstractRepository{
         ]);
     }
     public function friends($user){
-        $subQuery=DB::table('user_relationships As a')->where('a.user_id1', $user->id)->where('a.type',1)->join('user_relationships As b','b.user_id2','=', 'a.user_id2')->where('b.type',1)->groupBy('a.user_id1','b.user_id1')->select('a.user_id1 as id1','b.user_id1 as id2',DB::raw('count(*) as total'));
-        $userFriends=DB::table('users')->joinSub($subQuery,'A','users.id','=','A.id2')->join('info_users','info_users.user_id','=','id2')->select('A.id1','A.id2','A.total','users.first_name','users.last_name','info_users.avatar')->get();
+        $subQuery=DB::table('user_relationships As a')
+            ->where('a.user_id1', $user->id)->where('a.type',1)
+            ->join('user_relationships As b','b.user_id2','=', 'a.user_id2')
+            ->where('b.type',1)
+            ->groupBy('a.user_id1','b.user_id1')
+            ->select('a.user_id1 as id1','b.user_id1 as id2',DB::raw('count(*) as total'));
+        $userFriends=DB::table('users')
+            ->joinSub($subQuery,'A','users.id','=','A.id2')
+            ->join('info_users','info_users.user_id','=','id2')
+            ->select('A.id1','A.id2','A.total','users.first_name','users.last_name','info_users.avatar')->get();
         return $userFriends;
     }
     public function updateRelation($data){
-         $check=DB::table('user_relationships')->upsert($data,['user_id1','user_id2'],['type'] );
+         $check= UserRelationship::updateOrCreate(
+            [
+                'user_id1' => $data['user_id1'],
+                'user_id2' => $data['user_id2'],
+            ],
+            ['type' => $data['type']] );
          return $check;
     }
-}
 
- ?>
+    public function block($request)
+    {
+        DB::beginTransaction();
+        try {
+            $user=JWTAuth::toUser($request->token);
+            if ($user) {
+                $data1=['user_id1'=>$user->id,'user_id2'=>$request->user_id, 'type'=>4];
+                $data2=['user_id1'=>$request->user_id,'user_id2'=>$user->id, 'type'=>4];
+                $this->updateRelation($data1);
+                $this->updateRelation($data2);
+            };
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return false;
+        }
+        return true;
+    }
+
+    public function unblock($request)
+    {
+        DB::beginTransaction();
+        try {
+            $user=JWTAuth::toUser($request->token);
+            $relation = UserRelationship::where('user_id1', '=', $user->id)
+                ->where('user_id2', '=', $request->user_id)
+                ->where('type', '=', 4)
+                ->first();
+            if ($relation) {
+                $data1=['user_id1'=>$user->id,'user_id2'=>$request->user_id, 'type'=>1];
+                $data2=['user_id1'=>$request->user_id,'user_id2'=>$user->id, 'type'=>1];
+                $this->updateRelation($data1);
+                $this->updateRelation($data2);
+            };
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return false;
+        }
+        return true;
+    }
+}

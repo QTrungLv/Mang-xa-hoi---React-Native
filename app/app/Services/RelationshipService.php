@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Http\Resources\CommentCollection;
+use App\Http\Resources\UserResource;
 use App\Models\InfoUser;
 use App\Models\UserRelationship;
 use App\Models\User;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RelationshipService extends BaseService{
-    private RelationshipRepository $relationshipRepository;
+    protected RelationshipRepository $relationshipRepository;
     public function __construct(RelationshipRepository $relationshipRepository){
         $this->relationshipRepository = $relationshipRepository;
     }
@@ -20,10 +21,16 @@ class RelationshipService extends BaseService{
         $user = JWTAuth::toUser($request->token);
         $data=['friends'=>[]];
         if($request->user_id){
-            $friends=DB::table('user_relationships')->where('user_id1',$request->user_id)->where('type',1)->join('users','users.id','=','user_relationships.user_id2')->leftJoin('info_users','info_users.user_id','=','user_relationships.user_id2')->get();
+            $friends=DB::table('user_relationships')->where('user_id1',$request->user_id)
+            ->where('type',1)->join('users','users.id','=','user_relationships.user_id2')
+            ->leftJoin('info_users','info_users.user_id','=','user_relationships.user_id2')
+            ->select('user_relationships.user_id2', 'users.first_name', 'users.last_name', 'user_relationships.created_at', 'info_users.avatar')
+            ->get();
             foreach($friends as $friend){
                 if($friend->user_id2!=$user->id){
-                     $mutualFriends=DB::table('user_relationships As a')->where('a.user_id1', $user->id)->join('user_relationships As b', 'b.user_id2','=', 'a.user_id2')->where('b.user_id1',$friend->user_id2)->groupBy('a.user_id1','b.user_id1')->count();
+                     $mutualFriends=DB::table('user_relationships As a')->where('a.user_id1', $user->id)
+                     ->join('user_relationships As b', 'b.user_id2','=', 'a.user_id2')
+                     ->where('b.user_id1',$friend->user_id2)->groupBy('a.user_id1','b.user_id1')->count();
                      $data['friends'][]=[
                         'id'=>$friend->user_id2,
                         'username'=>$friend->first_name.' '.$friend->last_name,
@@ -37,12 +44,18 @@ class RelationshipService extends BaseService{
             return $this->sendResponse($data, "Thành công");
             }
         }else{
-            $friends=DB::table('user_relationships')->where('user_id1',$user->id)->where('type',1)->join('users','users.id','=','user_relationships.user_id2')->leftJoin('info_users','info_users.user_id','=','user_relationships.user_id2')->get();
+            $friends=DB::table('user_relationships')->where('user_id1',$user->id)->where('type',1)
+            ->join('users','users.id','=','user_relationships.user_id2')
+            ->leftJoin('info_users','info_users.user_id','=','user_relationships.user_id2')
+            ->select('user_relationships.user_id2', 'users.first_name', 'users.last_name', 'user_relationships.created_at', 'info_users.avatar')
+            ->get();
                 foreach($friends as $friend){
                     // dd($friend);
-                        $mutualFriends=DB::table('user_relationships As a')->where('a.user_id1', $user->id)->join('user_relationships As b', 'b.user_id2','=', 'a.user_id2')->where('b.user_id1',$friend->user_id2)->groupBy('a.user_id1','b.user_id1')->count();
+                        $mutualFriends=DB::table('user_relationships As a')
+                        ->where('a.user_id1', $user->id)->join('user_relationships As b', 'b.user_id2','=', 'a.user_id2')
+                        ->where('b.user_id1',$friend->user_id2)->groupBy('a.user_id1','b.user_id1')->count();
                         $data['friends'][]=[
-                            'id'=>$friend->id,
+                            'id'=>$friend->user_id2,
                             'username'=>$friend->first_name.' '.$friend->last_name,
                             'avatar'=>$friend->avatar?$friend->avatar:'',
                             'same_friends'=>$mutualFriends,
@@ -61,7 +74,7 @@ class RelationshipService extends BaseService{
         $user=JWTAuth::toUser($request->token);
         if($user){
             $relation=$this->relationshipRepository->findWhere(['user_id1'=>$request->user_id, 'user_id2'=>$user->id]);
-            if($relation){
+            if($relation && $request->is_accept == 1){
                 $data1=['user_id1'=>$request->user_id,'user_id2'=>$user->id,'type'=>$request->is_accept];
                 $data2=['user_id1'=>$user->id, 'user_id2'=>$request->user_id,'type'=>$request->is_accept];
                 $userRelationship1=$this->relationshipRepository->updateRelation($data1);
@@ -69,6 +82,10 @@ class RelationshipService extends BaseService{
                 if($userRelationship1&&$userRelationship2){
                   return $this->sendResponse($userRelationship2, "Thành công");
                 }
+            }
+            else {
+                $relation->delete();
+                return $this->sendResponse(null, "Thành công");
             }
         }
         return $this->sendError(null, "Có lỗi xảy ra");
@@ -78,7 +95,9 @@ class RelationshipService extends BaseService{
          $friends=$this->relationshipRepository->friends($user);
          $listUsers=[];
          foreach($friends as $friend){
-            $checkExist=DB::table('user_relationships')->where([['user_id1', $user->id],['user_id2',$friend->id2]])->orWhere([['user_id1', $friend->id2],['user_id2',$user->id]])->exists();
+            $checkExist=DB::table('user_relationships')
+                ->where([['user_id1', $user->id],['user_id2',$friend->id2]])
+                ->orWhere([['user_id1', $friend->id2],['user_id2',$user->id]])->exists();
             if(!$checkExist&&$friend->id2!=$user->id){
                   $listUsers[]=[
                 'user_id'=>$friend->id2, 
@@ -92,9 +111,9 @@ class RelationshipService extends BaseService{
         }
      public function setRequestFriend($request){
         $user=JWTAuth::toUser($request->token);
-        $data=['user_id1'=>$user->id,'user_id2'=>$request->user_id, 'type'=>0];
+        $data=['user_id1'=>$user->id,'user_id2'=>$request->user_id, 'type'=>2];
         $this->relationshipRepository->updateRelation($data);
-        $numberRequest=DB::table('user_relationships')->where('user_id1',$user->id)->where('type',0)->count();
+        $numberRequest=DB::table('user_relationships')->where('user_id1',$user->id)->where('type',2)->count();
         if($numberRequest){
             return $this->sendResponse($numberRequest, "Thành công");
         }
@@ -103,7 +122,10 @@ class RelationshipService extends BaseService{
     public function getRequestedFriends($request){
             $user=JWTAuth::toUser($request->token);
             if($user){
-                $listRequestedFriends=DB::table('user_relationships')->where('user_relationships.user_id2', $user->id)->where('type',0)->join('users','users.id','=','user_relationships.user_id1')->leftJoin('info_users','info_users.user_id','=','user_relationships.user_id1')->select('user_relationships.user_id1 as id','users.first_name','users.last_name','info_users.avatar')->get();
+                $listRequestedFriends=DB::table('user_relationships')->where('user_relationships.user_id2', $user->id)
+                ->where('type',2)->join('users','users.id','=','user_relationships.user_id1')
+                ->leftJoin('info_users','info_users.user_id','=','user_relationships.user_id1')
+                ->select('user_relationships.user_id1 as id','users.first_name','users.last_name','info_users.avatar')->get();
                 if($listRequestedFriends){
                     return $this->sendResponse($listRequestedFriends, "Thành công");
                 }            
@@ -113,7 +135,7 @@ class RelationshipService extends BaseService{
     public function getListBlocks($request){
          $user=JWTAuth::toUser($request->token);
          if($user){
-            $listBlocks=DB::table('user_relationships')->where('user_id1', $user->id)->where('type',4)->paginate(8);
+            $listBlocks=DB::table('user_relationships')->where('user_id1', $user->id)->where('type',4)->paginate();
             if($listBlocks){
                 return $this->sendResponse($listBlocks->items(), "Thành công");
             }
@@ -121,7 +143,30 @@ class RelationshipService extends BaseService{
          return $this->sendError(null, "Có lỗi xảy ra");
     }
 
+    public function block($request)
+    {
+        $block = $this->relationshipRepository->block($request);
+        if ($block){
+            $user = User::find($request->user_id);
+            if ($user) {
+                return $this->sendResponse(new UserResource($user), 'Thành công');
+            }
+            return $this->sendError(null, 'Có lỗi xảy ra'); 
+        }
+        return $this->sendError(null, 'Có lỗi xảy ra'); 
+    }
 
+    public function unblock($request) {
+        $block = $this->relationshipRepository->unblock($request);
+        if ($block){
+            $user = User::find($request->user_id);
+            if ($user) {
+                return $this->sendResponse(new UserResource($user), 'Thành công');
+            }
+            return $this->sendError(null, 'Có lỗi xảy ra'); 
+        }
+        return $this->sendError(null, 'Có lỗi xảy ra'); 
+    }
    
 }
 ?>

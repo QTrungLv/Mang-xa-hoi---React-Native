@@ -27,6 +27,7 @@ class UserResource extends JsonResource
             'country' => isset($this->infoUser->country) ? $this->infoUser->country : null,
             'total_friend' => $this->getCountFriend(),
             'is_friend' => $this->checkFriend($user->id) ? 1 : 0,
+            'is_block' => $this->checkBlock($user->id, $this->id) ? 1 : 0,
         ];
     }
 }
