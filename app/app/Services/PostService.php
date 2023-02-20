@@ -71,9 +71,24 @@ class PostService extends BaseService{
      public function delete($id,$request){
         $user = JWTAuth::toUser($request->token);
         $isSuccessful=$this->postRepository->delete($id);
-        Image::where('post_id',$id)->delete();
+        $images=Image::where('post_id',$id)->get();
+        $bucket=app('firebase.storage')->getBucket();
+        $checkOK=true;
+        foreach($images as $image){
+            if($bucket->object($image->name)){
+                            $check=$image->delete();
+                            if(!$check){
+                                 $checkOK=false;
+                            }
+                            try{
+                                $checkDelete=$bucket->object($image->name)->delete();
+                            }catch(Exception $e){
+                                 
+                            }
+                        };
+        }
         Comment::where('post_id',$id)->delete();
-        if($isSuccessful){
+        if($isSuccessful&&$checkOK){
             return $this->sendResponse($isSuccessful, '');
         }else{
            return $this->sendError(null, "Có lỗi xảy ra");
@@ -82,7 +97,7 @@ class PostService extends BaseService{
      public function update($id,$request){
         // dd($request->ip());  
         $params=$request->all();
-         $bucket=app('firebase.storage')->getBucket();
+        $bucket=app('firebase.storage')->getBucket();
         $user = JWTAuth::toUser($params['token']);
         $post = $this->postRepository->find($id);
         DB::beginTransaction();
