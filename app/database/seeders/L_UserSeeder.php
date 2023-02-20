@@ -17,7 +17,7 @@ class L_UserSeeder extends Seeder
     {
         $datas=[[
             'first_name'=>'Nguyễn',
-            'last_name'=>'Sơn',
+            'last_name'=>'A',
             'is_verified'=>1,
             'sex'=>1,
             'email'=>'nguyenvanlongbg465@gmail.com',
@@ -25,7 +25,7 @@ class L_UserSeeder extends Seeder
             'password'=>'$2y$10$lDrQdCpm2ouRsHSgDvKDUOKPs180OxIbAjWISQYV6tnsdmNynN5Y6'
         ],
         [
-            'first_name'=>'Nguyễn',
+            'first_name'=>'Đàm',
             'last_name'=>'Trung',
             'is_verified'=>1,
             'sex'=>1,
@@ -34,8 +34,8 @@ class L_UserSeeder extends Seeder
             'password'=>'$2y$10$lDrQdCpm2ouRsHSgDvKDUOKPs180OxIbAjWISQYV6tnsdmNynN5Y6'
         ],
          [
-            'first_name'=>'Nguyễn',
-            'last_name'=>'Hanh',
+            'first_name'=>'Đàm',
+            'last_name'=>'Quân',
             'is_verified'=>1,
             'sex'=>1,
             'email'=>'nguyenhaanh@gmail.com',
@@ -43,8 +43,8 @@ class L_UserSeeder extends Seeder
             'password'=>'$2y$10$lDrQdCpm2ouRsHSgDvKDUOKPs180OxIbAjWISQYV6tnsdmNynN5Y6'
          ],
           [
-            'first_name'=>'Nguyễn',
-            'last_name'=>'Kanh',
+            'first_name'=>'Trung',
+            'last_name'=>'Quân',
             'is_verified'=>1,
             'sex'=>1,
             'email'=>'nguyenhaha@gmail.com',
@@ -52,8 +52,8 @@ class L_UserSeeder extends Seeder
             'password'=>'$2y$10$lDrQdCpm2ouRsHSgDvKDUOKPs180OxIbAjWISQYV6tnsdmNynN5Y6'
           ],
           [
-            'first_name'=>'Nguyễn',
-            'last_name'=>'Manh',
+            'first_name'=>'Quân',
+            'last_name'=>'Đàm',
             'is_verified'=>1,
             'sex'=>1,
             'email'=>'nguyenhaha@gmail.com',

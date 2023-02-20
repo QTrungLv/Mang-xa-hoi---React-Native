@@ -18,7 +18,7 @@ class L_UserInfoSeeder extends Seeder
         $datas=[
             [
                 'user_id'=>1,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/1%2FImage%2Favatar.png?alt=media&token=7d2c6992-1d42-4541-a55b-64d04c680835',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -26,7 +26,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>2,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/2%2Favatar.png?alt=media&token=23d75a7b-645c-4dd3-b7f4-8dced087c93b',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -34,7 +34,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>3,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/3%2FImage%2Favatar.jfif?alt=media&token=5df916a1-ea81-48f6-a8f5-b19bc5989020',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -42,7 +42,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>4,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/4%2FImage%2Favatar.jpg?alt=media&token=3fc3cc15-ed41-4297-9519-d147c30ecf26',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -50,7 +50,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>5,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/5%2FImage%2Favatar.jfif?alt=media&token=8b3d74bc-baa1-4a59-ac91-15da2a7bb4ca',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -58,7 +58,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>6,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/6%2FImage%2Favatar.jfif?alt=media&token=da7b707e-bb9c-439d-b89e-586cc42e00ac',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -66,7 +66,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>7,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/7%2FImage%2Favatar.jfif?alt=media&token=b8d9fdc0-0c06-423f-bc8d-1899d29e7bbd',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -74,7 +74,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>8,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/8%2FImage%2Favatar.jpg?alt=media&token=2ba20ac0-bf19-46fc-9917-8a1a4e6587c6',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
@@ -82,7 +82,7 @@ class L_UserInfoSeeder extends Seeder
             ],
             [
                 'user_id'=>9,
-                'avatar'=>'https://storage.googleapis.com/okggggg-fc02e.appspot.com/1/Image/2_1.jpg?GoogleAccessId=firebase-adminsdk-jswaf%40okggggg-fc02e.iam.gserviceaccount.com&Expires=1697907600&Signature=SKQJpvc9dexeu9klKaLpb92prL8Hs%2Bn8Geh3j52mjgx46%2Btrs3g%2FcMG7hPyGppq%2B04Ntx7iqo8%2BlW%2BjVnspBTaNstq2yarNdkOm4cI0ITVq0Cbhxan1Tk5URNwv0ijV%2B9gG9z4e02yx0MvhLacxuK13W0TDd%2B3EAPTfJS3nqD%2FpvQ8HYBQk6bZFct2xsU%2BR%2F1QlOD0WfKypl0IZD694t4NFyzb8LL5hEcigzclTiHfXPp7K8S9c51SP0MuiDLYNH1gi2HP3iMEwElVYVF4uVtzHChCZLy8ynGhcaOwUWnvb4r0VNI1evf%2BoFBEH4krvl%2FJOiq6tDhAPAVPCOW7UepQ%3D%3D&generation=1676644592226214',
+                'avatar'=>'https://firebasestorage.googleapis.com/v0/b/okggggg-fc02e.appspot.com/o/9%2FImage%2Favatar.jfif?alt=media&token=2418b364-918f-4d21-b911-7d7ebcdf071d',
                 'birthday'=>null,
                 'description'=>'',
                 'city'=>'',
