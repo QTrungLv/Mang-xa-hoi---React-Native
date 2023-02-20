@@ -59,17 +59,17 @@ class L_RelationSeeder extends Seeder
                [
                 'user_id1'=>2,
                 'user_id2'=>4,
-                'type'=>0
+                'type'=>2
                ],
                [
                 'user_id1'=>2,
                 'user_id2'=>5,
-                'type'=>4
+                'type'=>2
                ],
                [
                 'user_id1'=>5,
                 'user_id2'=>1,
-                'type'=>0
+                'type'=>2
                ],
                [
                 'user_id1'=>1,
@@ -77,14 +77,29 @@ class L_RelationSeeder extends Seeder
                 'type'=>4
                ],
                [
+                'user_id1'=>6,
+                'user_id2'=>1,
+                'type'=>4
+               ],
+               [
                 'user_id1'=>1,
                 'user_id2'=>7,
-                'type'=>-1
+                'type'=>4
+               ],
+               [
+                'user_id1'=>7,
+                'user_id2'=>1,
+                'type'=>4
                ],
                [
                 'user_id1'=>1,
                 'user_id2'=>8,
-                'type'=>0
+                'type'=>1
+               ],
+               [
+                'user_id1'=>8,
+                'user_id2'=>1,
+                'type'=>1
                ],
                 [
                 'user_id1'=>4,
@@ -95,6 +110,11 @@ class L_RelationSeeder extends Seeder
                 'user_id1'=>9,
                 'user_id2'=>4,
                 'type'=>1
+               ],
+               [
+                'user_id1'=>9,
+                'user_id2'=>1,
+                'type'=>2
                ],
                ];
                UserRelationship::insert($datas);
