@@ -153,7 +153,6 @@ export default function HomePage({ navigation }) {
             avatar: res.data.data.avatar,
             username: res.data.data.username
           }
-          console.log("UserInfo: ", userInfo)
           dispatch({
             type: GET_INFO,
             payload: userInfo
