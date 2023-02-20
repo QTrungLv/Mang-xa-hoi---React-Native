@@ -19,3 +19,4 @@ export const getInfo = (content) => {
         payload: content
     }
 }
+

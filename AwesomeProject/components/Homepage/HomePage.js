@@ -18,6 +18,8 @@ import { getToken } from '../../utils/Token';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch, useSelector } from 'react-redux';
+import { GET_INFO } from '../../redux/actions/actionTypes';
 const ContainerAppBar = styled.View`
   width: 100%;
   height: 58px;
@@ -124,39 +126,61 @@ const UserActive = styled.View`
 
 export default function HomePage({ navigation }) {
 
-  const refRBSheet = useRef();
+  const dispatch = useDispatch()
+
   const [dataPost, setDataPost] = useState()
   const [token, setToken] = useState("")
 
 
   const getToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem("@UserToken")
 
-      if (value != null) {
-        setToken(value)
-        console.log("Value: ", value)
-      }
+    const value = await AsyncStorage.getItem("@UserToken")
 
-    } catch (error) {
-      console.log(error)
+    if (value != null) {
+      setToken(value)
+
     }
   }
 
+  useEffect(() => {
+    const getInfoUser = async () => {
+      let api = `http://10.0.2.2:8000/api/personal/infoUser/1?token=${token}`
+      await axios.get(api)
+        .then((res) => {
+          console.log(token)
+          const userInfo = {
+            user_id: res.data.data.id,
+            avatar: res.data.data.avatar,
+            username: res.data.data.username
+          }
+          console.log("UserInfo: ", userInfo)
+          dispatch({
+            type: GET_INFO,
+            payload: userInfo
+          })
+
+        })
+        .catch((err) => {
+          console.log("error:", err)
+        })
+    }
+    getToken()
+    getInfoUser()
+  }, [])
 
   useEffect(() => {
 
     const getListPost = async () => {
       //const axios = Headers(token)
-      let api = `http://10.0.2.2:8000/api/post/?token=${token}`
+      let api = `http://10.0.2.2:8000/api/post/?token=${token}&user_id`
       console.log(api)
       await axios
         .get(api)
         .then((res) => {
+          console.log(res.data.data.post)
           setDataPost(res.data.data.post)
         })
         .catch((err) => {
-          console.log(err)
         })
     }
     getToken()
@@ -248,7 +272,6 @@ export default function HomePage({ navigation }) {
 
       {
         dataPost ? dataPost.map((item) => {
-          console.log(item)
           return (
             <View key={item.id}>
               <Feed postDetails={item} />
@@ -258,72 +281,6 @@ export default function HomePage({ navigation }) {
 
         }) : <></>
       }
-
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={true}
-        customStyles={{
-          wrapper: {
-            // backgroundColor: 'transparent-black',
-          },
-          draggableIcon: {
-            backgroundColor: '#000',
-          },
-        }}>
-        <TouchableOpacity onPress={handleOption1}>
-          <RowDetails>
-            <Entypo name="bell" size={30} style={{ margin: 10 }} />
-            <TextDetails
-              style={{
-                fontSize: 20,
-                fontFamily: 'Cochin',
-                fontWeight: 'bold',
-              }}>
-              Tắt thông báo cho bài viết này
-            </TextDetails>
-          </RowDetails>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleOption2}>
-          <RowDetails>
-            <MaterialIcons name="edit" size={30} style={{ margin: 10 }} />
-            <TextDetails
-              style={{
-                fontSize: 20,
-                fontFamily: 'Cochin',
-                fontWeight: 'bold',
-              }}>
-              Chỉnh sửa bài viết
-            </TextDetails>
-          </RowDetails>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleOption3}>
-          <RowDetails>
-            <AntDesign name="delete" size={30} style={{ margin: 10 }} />
-            <TextDetails
-              style={{
-                fontSize: 20,
-                fontFamily: 'Cochin',
-                fontWeight: 'bold',
-              }}>
-              Xóa bài viết
-            </TextDetails>
-          </RowDetails>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
-          <RowDetails>
-            <AntDesign name="closecircleo" size={30} style={{ margin: 10 }} />
-            <TextDetails
-              style={{
-                fontSize: 20,
-                fontFamily: 'Cochin',
-                fontWeight: 'bold',
-              }}>
-              Đóng
-            </TextDetails>
-          </RowDetails>
-        </TouchableOpacity>
-      </RBSheet>
     </ScrollView>
   )
 }

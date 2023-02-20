@@ -1,21 +1,20 @@
 const intialState = {
-    name: "",
-    avatarUrl: "",
-    coverUrl: "",
-    address: "",
+    username: "",
+    avatar: "",
+    user_id: ""
 }
 
 //action: username, password
 export default function UserReducer(state = intialState, action) {
     switch (action.type) {
         case "GET_INFO":
-            console.log(action.payload)
+            console.log("Payload: ", action.payload)
             return {
                 ...state,
-                name: action.payload.name,
-                avatarUrl: action.payload.avatarUrl,
-                coverUrl: action.payload.coverUrl,
-                address: action.payload.address
+                username: action.payload.username,
+                avatar: action.payload.avatar,
+                user_id: action.payload.user_id
+
             }
         default: {
             return state

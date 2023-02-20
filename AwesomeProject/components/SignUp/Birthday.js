@@ -64,7 +64,7 @@ export default function Birthday({ route, navigation }) {
           style={styleSheet.button}
           onPress={async () => {
             console.log(username, password);
-            navigation.navigate("OtpSignUp", {user_id : "1"})
+
             try {
               const response = await axios.post(
                 'http://10.0.2.2:8000/api/register',

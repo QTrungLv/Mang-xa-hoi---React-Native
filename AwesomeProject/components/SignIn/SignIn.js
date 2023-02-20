@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { signIn } from '../../redux/actions/action'
 import Dialog from 'react-native-dialog';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getToken } from '../../utils/Token';
 
 const mapDispatchToProps = (dispatch) => {
 
@@ -20,6 +21,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function SignIn(props) {
+
+
 
     // const [SignInForm, setSignInForm] = useState({
     //     username: "",
@@ -57,7 +60,6 @@ function SignIn(props) {
     useEffect(() => {
         password.length < 6 ? setMessage1("Password phải có từ 6 kí tự trở lên") : setMessage1("")
     }, [password])
-
 
     const handleSignIn = async () => {
 

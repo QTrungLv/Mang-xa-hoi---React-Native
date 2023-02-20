@@ -17,6 +17,7 @@ const OtpSignUp = ({ route, navigation }) => {
   const [otp, setOtp] = useState('');
   const [message, setMessage] = useState('Đã xảy ra lỗi');
   const [visible, setVisible] = useState(false);
+  const [success, setSuccess] = useState(false)
 
   const handleSignUp = async () => {
     console.log(user_id);
@@ -27,12 +28,13 @@ const OtpSignUp = ({ route, navigation }) => {
       });
       console.log(response.data);
       setMessage(response.data.message);
+      setSuccess(true);
     } catch (error) {
       console.log(error.response.data);
       setMessage(error.response.data.message);
+      setVisible(true)
     }
-    setVisible(true);
-    navigation.navigate("SignIn")
+
   };
 
   return (
@@ -55,16 +57,26 @@ const OtpSignUp = ({ route, navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleSignUp}>
           <Text style={styles.textInButton}>Continue</Text>
         </TouchableOpacity>
+
       </View>
       <View style={styles.bot}>
         <Text style={styles.forgot}>Need help?</Text>
         <Text style={styles.signup} onPress={() => navigation.navigate("SignIn")}>Sign In</Text>
       </View>
+
       <Dialog.Container visible={visible}>
         <Dialog.Title> Thông tin</Dialog.Title>
         <Dialog.Description>{message}</Dialog.Description>
         <Dialog.Button label="OK" onPress={() => setVisible(false)} />
       </Dialog.Container>
+
+      <Dialog.Container visible={success}>
+        <Dialog.Title> Thông tin</Dialog.Title>
+        <Dialog.Description>{message}</Dialog.Description>
+        <Dialog.Button label="OK" onPress={() => navigation.navigate("SignIn")} />
+      </Dialog.Container>
+
+
     </ScrollView>
   );
 };

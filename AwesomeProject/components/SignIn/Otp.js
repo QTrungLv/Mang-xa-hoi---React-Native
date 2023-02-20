@@ -90,7 +90,6 @@ function Otp(props) {
                         Xác nhận
                     </Text>
                 </Pressable>
-                <Text>UserId {id}</Text>
             </View>
             <Dialog.Container visible={showDialog}>
                 <Dialog.Title>Lỗi đăng nhập</Dialog.Title>

@@ -13,9 +13,14 @@ import axios from 'axios';
 import Dialog from 'react-native-dialog';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Header } from '../../utils/Header';
+import { useSelector } from 'react-redux';
 
 export default function MakePost({ navigation }) {
+
+    const userInfo = useSelector(state => state.user)
+    console.log("Info:", userInfo)
     const [showDialog, setShowDialog] = useState(false)
+    const [userData, setUserData] = useState("")
     const [havePost, setHavePost] = useState(false)
     const [token, setToken] = useState("")
     // Post 
@@ -29,8 +34,6 @@ export default function MakePost({ navigation }) {
     const [postButtonDisabled, setPostButtonDisabled] = useState(false)
 
     //Form Data
-
-
     const refRBSheet = useRef()
 
     const selectImage = () => {
@@ -82,23 +85,23 @@ export default function MakePost({ navigation }) {
             token: token,
             described: description,
             image: uriImage,
-            user_id: 3
+            user_id: userData.id
         }
         )
             .then((res) => {
                 console.log(res.data)
-
+                setShowDialog(true)
             }).catch((err) => {
                 console.log(err)
             })
-        //setShowDialog(true)
+
 
 
     }
 
     //Note 2
     function handlerGoBack() {
-        havePost ? refRBSheet.current.open() : navigation.goBack()
+        havePost ? refRBSheet.current.open() : navigation.navigate("Tab")
     }
 
     useEffect(() => {
@@ -111,7 +114,6 @@ export default function MakePost({ navigation }) {
 
     const handleCancel = () => {
         setShowDialog(false)
-        navigation.popToTop()
         navigation.navigate("Tab")
     }
 
@@ -139,10 +141,9 @@ export default function MakePost({ navigation }) {
             <View style={{ borderWidth: 0.3, borderBottomColor: "#D9D9D9" }}></View>
             <View style={styles.post}>
                 <View style={styles.headerPost}>
-                    <Image style={styles.avatarImage} source={avatar} />
+                    <Image style={styles.avatarImage} source={{ uri: userInfo.avatar }} />
                     <View style={styles.personalPost}>
-                        <Text style={styles.namePost}>Quang Trung</Text>
-                        <Text style={styles.publicPost}>Công khai</Text>
+                        <Text style={styles.namePost}>{userInfo.username}</Text>
                     </View>
                 </View>
                 <TextInput

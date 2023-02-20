@@ -13,17 +13,19 @@ import Birthday from '../components/SignUp/Birthday';
 import Auth from '../components/auth/Auth'
 import PersonPage from '../components/PersonalPage/PersonPage';
 import Feed from '../components/Post/Feed';
+import OtpSignUp from '../components/SignUp/Otp';
 const Stack = createNativeStackNavigator()
 
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Tab' screenOptions={{ headerShown: true }} >
+            <Stack.Navigator initialRouteName='Homepage' screenOptions={{ headerShown: true }} >
 
                 <Stack.Screen name={"Redirect"} component={Redirect} />
                 <Stack.Screen name={"Auth"} component={Auth} />
                 <Stack.Screen name={"Otp"} component={Otp} /*options={{ headerShow: false }}*/ />
                 <Stack.Screen name={"SignIn"} component={SignIn} options={{ headerShown: false }} />
+                <Stack.Screen name={"OtpSignUp"} component={OtpSignUp} options={{ headerShown: false }} />
                 <Stack.Screen name={"MakePost"} component={MakePost} options={{ headerShown: false }} />
                 <Stack.Screen name={"SignUp"} component={SignUp} />
                 <Stack.Screen name={"Post"} component={Feed} />
@@ -32,7 +34,7 @@ export default function Navigation() {
                 {/* <Stack.Screen name={"NameLogin"} component={NameLogin} /> */}
                 {/* <Stack.Screen name={"HomePage"} component={HomePage} /> */}
                 {/* <Stack.Screen name={"Input"} component={InputSignIn} /> */}
-                <Stack.Screen name={"Tab"} component={TabNavigation} options={{ headerShown: false }}/>
+                <Stack.Screen name={"Tab"} component={TabNavigation} options={{ headerShown: false }} />
                 <Stack.Screen name={"ReportPost"} component={ReportPost} />
                 <Stack.Screen name={"PersonalPage"} component={PersonPage} />
             </Stack.Navigator>

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { View } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 
 import styled from 'styled-components/native';
 
@@ -8,7 +8,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import RBSheet from 'react-native-raw-bottom-sheet'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 const Container = styled.View`
   flex: 1;
@@ -117,6 +118,14 @@ const UserActive = styled.View`
 	border-width: 2px;
 	border-color: #ffffff;
 `
+const RowDetails = styled.View`
+align-items: center;
+flex-direction: row;
+`;
+const TextDetails = styled.Text`
+  font-size: 13px;
+  color: #424040;
+`;
 //id 
 //name - string: Ten nguoi dung dang  
 //image - array[string]: url cua hinh anh
@@ -126,9 +135,22 @@ const UserActive = styled.View`
 //comment - number: so comment
 //is_like - string: kiem tra da like
 //
+
+
 const Feed = ({ postDetails }) => {
-  const { name, image, video, described, like, comment, is_liked, is_block } = postDetails;
-  console.log("Link: ", image[0].link)
+  const { author, image, video, described, like, comment, is_liked, is_block } = postDetails;
+  const refRBSheet = useRef();
+
+  const handleOption1 = () => {
+
+  }
+
+  const handleOption2 = () => {
+
+  }
+  const handleOption3 = () => {
+
+  }
 
   const Avatar = ({ source, online, story }) => {
     return (
@@ -138,15 +160,19 @@ const Feed = ({ postDetails }) => {
       </ContainerAvatar>
     )
   }
-
+  if (is_block) {
+    return (
+      <></>
+    )
+  }
   return (
     <>
       <Container>
         <Header>
           <Row>
-            <Avatar source={require('../../assets/user3.jpg')} />
+            <Avatar source={{ uri: author?.avatar }} />
             <View style={{ paddingLeft: 10 }}>
-              <User>{name}</User>
+              <User>{author?.username}</User>
               {/* <Row>
                 <Time>{time}</Time>
                 <Entypo name="dot-single" size={12} color="#747476" />
@@ -155,11 +181,16 @@ const Feed = ({ postDetails }) => {
             </View>
           </Row>
 
-          <Entypo name="dots-three-horizontal" size={15} color="#222121" />
+          <Entypo name="dots-three-horizontal" size={15} color="#222121" onPress={() => refRBSheet.current.open()} />
         </Header>
 
         <Post>{described}</Post>
-        {image[0] ? <Photo source={{uri: image[0].link}} /> : <></>}
+        <ScrollView horizontal={true}>
+          {image ? image.map((item) => {
+            <Photo source={{ uri: item.link }} />
+          }) : <></>}
+        </ScrollView>
+
 
         <Footer>
           <FooterCount>
@@ -210,6 +241,73 @@ const Feed = ({ postDetails }) => {
           </FooterMenu>
         </Footer>
         <BottomDivider />
+
+
+        <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          closeOnPressMask={true}
+          customStyles={{
+            wrapper: {
+              // backgroundColor: 'transparent-black',
+            },
+            draggableIcon: {
+              backgroundColor: '#000',
+            },
+          }}>
+          <TouchableOpacity onPress={handleOption1}>
+            <RowDetails>
+              <Entypo name="bell" size={30} style={{ margin: 10 }} />
+              <TextDetails
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'Cochin',
+                  fontWeight: 'bold',
+                }}>
+                Tắt thông báo cho bài viết này
+              </TextDetails>
+            </RowDetails>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOption2}>
+            <RowDetails>
+              <MaterialIcons name="edit" size={30} style={{ margin: 10 }} />
+              <TextDetails
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'Cochin',
+                  fontWeight: 'bold',
+                }}>
+                Chỉnh sửa bài viết
+              </TextDetails>
+            </RowDetails>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleOption3}>
+            <RowDetails>
+              <AntDesign name="delete" size={30} style={{ margin: 10 }} />
+              <TextDetails
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'Cochin',
+                  fontWeight: 'bold',
+                }}>
+                Xóa bài viết
+              </TextDetails>
+            </RowDetails>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+            <RowDetails>
+              <AntDesign name="closecircleo" size={30} style={{ margin: 10 }} />
+              <TextDetails
+                style={{
+                  fontSize: 20,
+                  fontFamily: 'Cochin',
+                  fontWeight: 'bold',
+                }}>
+                Đóng
+              </TextDetails>
+            </RowDetails>
+          </TouchableOpacity>
+        </RBSheet>
       </Container>
     </>
 
