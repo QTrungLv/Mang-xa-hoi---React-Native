@@ -129,8 +129,7 @@ class User extends Authenticatable implements JWTSubject
     public function getCountFriend() {
         $user = User::find($this->id);
         $user_friend = UserRelationship::where('user_id1', $user->id)
-            ->orWhere('user_id2', $user->id)
-            ->where('type', '!=', 4)->count();
+            ->where('type', '=', 2)->count();
         return $user_friend;
     }
 
@@ -140,12 +139,12 @@ class User extends Authenticatable implements JWTSubject
         else {
             $user_friend = UserRelationship::where('user_id1', '=', $user_id)
             ->where('user_id2', '=', $this->id)
-            ->orWhere('user_id1', '=', $this->id)
-            ->where('user_id2', '=', $user_id)
+            ->where('type', '=', 2)
             ->first();
-            if (isset($user_friend->type) && $user_friend->type != 4) {
+            if (isset($user_friend->type)) {
                 return true;
             }
+            return false;
         }
     }
 }
