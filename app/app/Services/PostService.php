@@ -24,7 +24,7 @@ class PostService extends BaseService{
             if ($request->file('image')) {
                 $dataImage = [];
                 $index=0;
-                foreach ([$request->file('image')] as $image) {
+                foreach ($request->file('image') as $image) {
                     $index+=1;
                     $extension = $image->getClientOriginalExtension();
                     $file = now() . $image->getClientOriginalName() . '.' . $extension;
@@ -43,11 +43,11 @@ class PostService extends BaseService{
             if ($request->file('video')) {
                  $dataVideo = [];
                  $index=0;
-                foreach ([$request->file('image')] as $image) {
+                foreach ($request->file('video') as $video) {
                     $index+=1;
-                    $extension = $image->getClientOriginalExtension();
-                    $file = now() . $image->getClientOriginalName() . '.' . $extension;
-                    $uploadedfile = fopen($image, 'r');
+                    $extension = $video->getClientOriginalExtension();
+                    $file = now() . $video->getClientOriginalName() . '.' . $extension;
+                    $uploadedfile = fopen($video, 'r');
                     $object = $bucket->upload($uploadedfile, [
                         'name' => $user->id.'/Video/' .$post->id.'_'.$index.'.'.$extension
                     ]);
@@ -153,8 +153,9 @@ class PostService extends BaseService{
     public function getAll($request){
          $params = $request->all();
         $user = JWTAuth::toUser($params['token']);
-         $listPosts= $this->postRepository->all();
-         $data=['post'=>[]];
+        $data=['post'=>[]];
+        if($params['user_id']!=null){
+            $listPosts= $this->postRepository->findWhere(['user_id'=>$params['user_id']]);
          foreach($listPosts as $post){
             $images=Image::where('post_id',$post['id'])->where('type','Image')->get();
             $videos=Image::where('post_id',$post['id'])->where('type','Video')->get();
@@ -169,6 +170,24 @@ class PostService extends BaseService{
             'like'=>$numberLike, 'comment'=>$numberComment, 'is_liked'=>$is_liked, 'is_blocked'=>0
         ];
          }
+        }else{
+           $listPosts= $this->postRepository->all();
+         foreach($listPosts as $post){
+            $images=Image::where('post_id',$post['id'])->where('type','Image')->get();
+            $videos=Image::where('post_id',$post['id'])->where('type','Video')->get();
+            $numberLike = PostInteract::where('post_id', '=', $post['id'])->count();
+            $numberComment = Comment::where('post_id', '=', $post['id'])->count();
+            $userInteract= PostInteract::where('post_id', '=',$post['id'])->where('user_id','=', $user->id)->first();
+            $is_liked = 0;
+            if($userInteract){
+                $is_liked = 1;
+            };
+            $data['post'][]=['id'=>$post['id'],'name'=>'Không có','image'=>$images,'video'=>$videos,'described'=>$post['content'],
+            'like'=>$numberLike, 'comment'=>$numberComment, 'is_liked'=>$is_liked, 'is_blocked'=>0
+        ];
+         }
+        }
+         
          if($data){
             return $this->sendResponse( $data, 'Thành công');
          }
@@ -181,7 +200,7 @@ class PostService extends BaseService{
     }
 
     public function getPost($id, $request){
-        $params = $request->all();
+        $params = $request->all();  
         $user = JWTAuth::toUser($params['token']);
         $post = $this->postRepository->find($id);
         $numberLike = PostInteract::where('post_id', '=', $id)->count();

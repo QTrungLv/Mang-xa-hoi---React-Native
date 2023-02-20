@@ -64,7 +64,7 @@ class L_RelationSeeder extends Seeder
                [
                 'user_id1'=>2,
                 'user_id2'=>5,
-                'type'=>-1
+                'type'=>4
                ],
                [
                 'user_id1'=>5,
@@ -74,7 +74,7 @@ class L_RelationSeeder extends Seeder
                [
                 'user_id1'=>1,
                 'user_id2'=>6,
-                'type'=>-1
+                'type'=>4
                ],
                [
                 'user_id1'=>1,

@@ -113,7 +113,7 @@ class RelationshipService extends BaseService{
     public function getListBlocks($request){
          $user=JWTAuth::toUser($request->token);
          if($user){
-            $listBlocks=DB::table('user_relationships')->where('user_id1', $user->id)->where('type',-1)->paginate(8);
+            $listBlocks=DB::table('user_relationships')->where('user_id1', $user->id)->where('type',4)->paginate(8);
             if($listBlocks){
                 return $this->sendResponse($listBlocks->items(), "Thành công");
             }
