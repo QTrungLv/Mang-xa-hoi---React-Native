@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, View, Image, StyleSheet, Text, TextInput, Pressable, ScrollView, SectionList } from 'react-native'
+import { SafeAreaView, View, Image, StyleSheet, Text, TextInput, Pressable, ScrollView, SectionList, Platform } from 'react-native'
 import avatar from '../../assets/icon/avatar.jpg'
 import goBack from '../../assets/icon/goback.png'
 import imageicon from '../../assets/icon/imageicon.png'
 import drafticon from '../../assets/icon/drafticon.png'
 import trashicon from '../../assets/icon/trashicon.png'
 import RBSheet from "react-native-raw-bottom-sheet";
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, show } from 'react-native-image-picker';
 
 import DocumentPicker from 'react-native-document-picker';
 import axios from 'axios';
@@ -18,21 +18,18 @@ import { useSelector } from 'react-redux';
 export default function MakePost({ navigation }) {
 
     const userInfo = useSelector(state => state.user)
-    console.log("Info:", userInfo)
     const [showDialog, setShowDialog] = useState(false)
-    const [userData, setUserData] = useState("")
+
     const [havePost, setHavePost] = useState(false)
     const [token, setToken] = useState("")
     // Post 
     const [description, setDecription] = useState("")
     const [uriImage, setUriImage] = useState([])
-    const [video, setVideo] = useState(null)
-    const [status, setStatus] = useState(null)
     //Post pimages
     const [numOfPictures, setNumOfPictures] = useState(0)
     //postButton
     const [postButtonDisabled, setPostButtonDisabled] = useState(false)
-
+    const [test, setTest] = useState(null)
     //Form Data
     const refRBSheet = useRef()
 
@@ -54,54 +51,69 @@ export default function MakePost({ navigation }) {
             } else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
             } else {
-                console.log(response);
 
                 setNumOfPictures(numOfPictures + 1)
-                const item = { key: numOfPictures, uri: response.assets[0].uri, name: response.assets[0].fileName }
+                console.log("Res: ", response)
+                const item = { uri: response.assets[0].uri, name: response.assets[0].fileName, type: "image/jpg" }
+
                 setUriImage([...uriImage, item]);
             }
         });
     };
 
-    const getToken = async () => {
-        try {
+    useEffect(() => {
+        const getToken = async () => {
+
             const value = await AsyncStorage.getItem("@UserToken")
 
             if (value != null) {
                 setToken(value)
-                console.log("Value: ", value)
-            }
 
-        } catch (error) {
-            console.log(error)
+            }
         }
-    }
+        getToken()
+    }, [])
 
     const handlePost = async () => {
-        getToken()
         const axios = Header(token)
+        console.log(uriImage[0].uri)
+        const formData = new FormData()
+        formData.append("token", token)
+        formData.append("user_id", userInfo.user_id)
+        formData.append("image", uriImage),
+        formData.append("described", description)
+        console.log(formData)
 
-        await axios.post("http://10.0.2.2:8000/api/post/create", {
-            token: token,
-            described: description,
-            image: uriImage,
-            user_id: userData.id
-        }
+        // await fetch(
+        //     "http://10.0.2.2:8000/api/post/create",
+        //     {
+        //         method: "post",
+        //         body: formData,
+        //         headers: {
+        //             "Content-Type": "multipart/form-data",
+        //             authorization: `Bearer ${token}`
+        //         }
+        //     }
+        // )
+
+        await axios.post("http://10.0.2.2:8000/api/post/create",
+            formData
+            //formData
         )
             .then((res) => {
                 console.log(res.data)
                 setShowDialog(true)
             }).catch((err) => {
                 console.log(err)
-            })
-
-
-
+            }
+            )
     }
+
+        
 
     //Note 2
     function handlerGoBack() {
-        havePost ? refRBSheet.current.open() : navigation.navigate("Tab")
+        navigation.goBack()
     }
 
     useEffect(() => {

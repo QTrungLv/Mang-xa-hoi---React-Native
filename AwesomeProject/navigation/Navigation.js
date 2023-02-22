@@ -14,12 +14,17 @@ import Auth from '../components/auth/Auth'
 import PersonPage from '../components/PersonalPage/PersonPage';
 import Feed from '../components/Post/Feed';
 import OtpSignUp from '../components/SignUp/Otp';
+import FriendPage from '../components/PersonalPage/FriendPage';
+import FeedDetails from '../components/Post/FeedDetails';
+import SearchPage from '../components/Search/SearchPage';
+import ChatUI from '../components/Chat/ChatUI';
+import ChatHomePage from '../components/Chat/ChatHomePage';
 const Stack = createNativeStackNavigator()
 
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Homepage' screenOptions={{ headerShown: true }} >
+            <Stack.Navigator initialRouteName='Tab' screenOptions={{ headerShown: true }} >
 
                 <Stack.Screen name={"Redirect"} component={Redirect} />
                 <Stack.Screen name={"Auth"} component={Auth} />
@@ -36,7 +41,12 @@ export default function Navigation() {
                 {/* <Stack.Screen name={"Input"} component={InputSignIn} /> */}
                 <Stack.Screen name={"Tab"} component={TabNavigation} options={{ headerShown: false }} />
                 <Stack.Screen name={"ReportPost"} component={ReportPost} />
-                <Stack.Screen name={"PersonalPage"} component={PersonPage} />
+                <Stack.Screen name={"PersonalPage"} component={PersonPage} options={{ headerShown: false }} />
+                <Stack.Screen name={"FriendPage"} component={FriendPage} options={{ headerShown: false }} />
+                <Stack.Screen name={"FeedDetails"} component={FeedDetails} options={{ headerShown: false }} />
+                <Stack.Screen name={"Search"} component={SearchPage} options={{ headerShown: false }} />
+                <Stack.Screen name={"ChatHomePage"} component={ChatHomePage} options={{ headerShown: false }} />
+                <Stack.Screen name={"ChatUI"} component={ChatUI} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -5,8 +5,8 @@ export const Header = (token) => {
     
     const header = axios.create({
         headers: {
-            'content-type': 'multipart/form-data',
-            accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            //accept: 'application/json',
             authorization: `Bearer ${token}`
         }
     })

@@ -10,9 +10,10 @@ import messageicon from '../../assets/icon/messageicon.jpg'
 import notifyicon from '../../assets/icon/notifyicon.png'
 import navbaricon from '../../assets/icon/baricon.png'
 import HomePage from './HomePage'
+import MainTabNavigator from '../Friend/FriendsTab'
+import SettingsScreen from './SettingsScreen'
 
 const Tab = createBottomTabNavigator()
-
 
 const TabNavigation = () => {
     return (
@@ -38,6 +39,13 @@ const TabNavigation = () => {
                     );
                 }
             }} />
+            <Tab.Screen name="Friend" component={MainTabNavigator} options={{
+                tabBarIcon: ({ size, focused, color }) => {
+                    return (
+                        <Image style={{ width: size, height: size }} source={navbaricon} />
+                    );
+                }
+            }} />
             <Tab.Screen name="Notify" component={Notify} options={{
                 tabBarIcon: ({ size, focused, color }) => {
                     return (
@@ -45,13 +53,14 @@ const TabNavigation = () => {
                     );
                 }
             }} />
-            <Tab.Screen name="Setting" component={Setting} options={{
+            <Tab.Screen name="Setting" component={SettingsScreen} options={{
                 tabBarIcon: ({ size, focused, color }) => {
                     return (
                         <Image style={{ width: size, height: size }} source={navbaricon} />
                     );
                 }
             }} />
+
         </Tab.Navigator>
 
     )

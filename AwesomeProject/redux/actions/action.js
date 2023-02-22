@@ -1,4 +1,4 @@
-import { GET_INFO, SIGN_IN } from "./actionTypes";
+import { GET_INFO, GET_POST, SIGN_IN } from "./actionTypes";
 
 //content: username, password, userID, image
 export const signIn = (content) => {
@@ -13,6 +13,14 @@ export const signUp = (content) => {
         payload: content
     }
 }
+
+export const setPost = (content) => {
+    return {
+        type: GET_POST,
+        payload: content
+    }
+}
+
 export const getInfo = (content) => {
     return {
         type: GET_INFO,

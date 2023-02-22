@@ -8,7 +8,6 @@ const intialState = {
 export default function UserReducer(state = intialState, action) {
     switch (action.type) {
         case "GET_INFO":
-            console.log("Payload: ", action.payload)
             return {
                 ...state,
                 username: action.payload.username,

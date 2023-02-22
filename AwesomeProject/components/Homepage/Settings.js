@@ -1,15 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Pressable, Text } from 'react-native'
-import { connect } from 'react-redux'
+import { Pressable, SafeAreaView, Text, View, Image } from 'react-native'
+import { connect, useSelector } from 'react-redux'
 
-const mapStateToProps = state => ({
-  user: state.user
-})
 
 const Setting = (props) => {
-
+  const userInfo = useSelector(state => state.user)
   const [token, setToken] = useState("")
 
   useEffect(() => {
@@ -22,7 +19,6 @@ const Setting = (props) => {
 
       if (value != null) {
         setToken(value)
-        console.log("Value: ", value)
       }
 
     } catch (error) {
@@ -55,14 +51,20 @@ const Setting = (props) => {
     // }
   }
   return (
-    <Pressable style={{ alignSelf: "flex-start", padding: 10, borderWidth: 1, borderColor: "#000", backgroundColor: "lightgray" }} onPress={handleLogout}>
-      <Text>
-        {token}
-      </Text>
-      <Text>{props.user.name}</Text>
-      
-    </Pressable>
+    <SafeAreaView>
+      <View>
+        <Image source={{ uri: userInfo.avatar }} />
+      </View>
+      <Pressable style={{ alignSelf: "flex-start", padding: 10, borderWidth: 1, borderColor: "#000", backgroundColor: "lightgray" }} onPress={handleLogout}>
+        <Text>
+          Đăng xuất
+        </Text>
+        <Text>{userInfo.username}</Text>
+
+      </Pressable>
+    </SafeAreaView>
+
   )
 }
 
-export default connect(mapStateToProps, null)(Setting);
+export default Setting;

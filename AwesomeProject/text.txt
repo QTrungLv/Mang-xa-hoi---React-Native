@@ -1,23 +1,4 @@
--src
---components
---redux
----reducers
----actions
---constants.js
---navigation
---App and index
-
-
-1. Task
-Trang chu:
-Tab ban be
-Tab thong bao
-Tab Chat
-Tab Cai dat
-
-Giao dien phu:
-Doi mat khau
-Cai dat thong bao
-Chan nguoi dung
-
-https://app.diagrams.net/#G1PFgVgIbewRDeCRO77uW6CufcC84sqaJ9
+API edit Post
+API like
+API makePost
+Gheo giao dien

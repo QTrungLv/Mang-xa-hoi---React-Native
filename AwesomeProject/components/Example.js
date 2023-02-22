@@ -1,161 +1,85 @@
-// Import React
-import React, { useEffect, useState } from 'react';
-// Import core components
-import {
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity
-} from 'react-native';
+import { useCallback, useState, useEffect } from 'react';
+import { StyleSheet, Text, SafeAreaView, Button, StatusBar, Alert } from 'react-native';
+import DocumentPicker from "react-native-document-picker"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Import Document Picker
-import DocumentPicker from 'react-native-document-picker';
+const Example = () => {
+    const [fileResponse, setFileResponse] = useState([]);
+    const [token, setToken] = useState("")
 
-export default function Example() {
-    const [singleFile, setSingleFile] = useState(null);
-
-    const uploadImage = async () => {
-        console.log("Upload")
-        // // Check if any file is selected or not
-        // if (singleFile != null) {
-        //     // If file selected then create FormData
-        //     const fileToUpload = singleFile;
-        //     const data = new FormData();
-        //     data.append('name', 'Image Upload');
-        //     data.append('file_attachment', fileToUpload);
-        //     // Please change file upload URL
-        //     let res = await fetch(
-        //         'http://localhost/upload.php',
-        //         {
-        //             method: 'post',
-        //             body: data,
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data; ',
-        //             },
-        //         }
-        //     );
-        //     let responseJson = await res.json();
-        //     if (responseJson.status == 1) {
-        //         alert('Upload Successful');
-        //     }
-        // } else {
-        //     // If no file selected the show alert
-        //     alert('Please Select File first');
-        // }
-    };
-    const [data, setData] = useState()
-    //useEffect(function, [var, let])
     useEffect(() => {
-        //Call API GET  --> data --> setData() --> return(---)
-    }, [])
+        const getToken = async () => {
 
-    const selectFile = async () => {
-        // Opening Document Picker to select one file
-        try {
-            const res = await DocumentPicker.pick({
-                // Provide which type of file you want user to pick
-                type: [DocumentPicker.types.allFiles],
-                // There can me more options as well
-                // DocumentPicker.types.allFiles
-                // DocumentPicker.types.images
-                // DocumentPicker.types.plainText
-                // DocumentPicker.types.audio
-                // DocumentPicker.types.pdf
-            });
-            // Printing the log realted to the file
-            console.log('res : ' + JSON.stringify(res));
-            // Setting the state to show single file attributes
-            setSingleFile(res);
-        } catch (err) {
-            setSingleFile(null);
-            // Handling any exception (If any)
-            if (DocumentPicker.isCancel(err)) {
-                // If user canceled the document selection
-                alert('Canceled');
-            } else {
-                // For Unknown Error
-                alert('Unknown Error: ' + JSON.stringify(err));
-                throw err;
+            const value = await AsyncStorage.getItem("@UserToken")
+
+            if (value != null) {
+                setToken(value)
+
             }
         }
-    };
+        getToken()
+    }, [])
+
+    const handleDocumentSelection = useCallback(async () => {
+        try {
+            const response = await DocumentPicker.pick({
+                presentationStyle: 'fullScreen',
+            });
+            console.log("response: ", response)
+            setFileResponse(response);
+        } catch (err) {
+            console.warn(err);
+        }
+    })
+    const handleAPI = async () => {
+        console.log(fileResponse)
+        const formData = new FormData()
+        formData.append("token", token)
+        formData.append("user_id", 1)
+        formData.append("image", fileResponse),
+            formData.append("described", "Test Document Picker2")
+
+
+        await fetch(
+            "http://10.0.2.2:8000/api/post/create",
+            {
+                method: "post",
+                body: formData,
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    authorization: `Bearer ${token}`
+                }
+            }
+        )
+    }
+
     return (
-        <View style={styles.mainBody}>
-            <View style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 30, textAlign: 'center' }}>
-                    React Native File Upload Example
-                </Text>
+        <SafeAreaView style={styles.container}>
+            <StatusBar barStyle={'dark-content'} />
+            {fileResponse.map((file, index) => (
                 <Text
-                    style={{
-                        fontSize: 25,
-                        marginTop: 20,
-                        marginBottom: 30,
-                        textAlign: 'center',
-                    }}>
-                    www.aboutreact.com
+                    key={index.toString()}
+                    style={styles.uri}
+                    numberOfLines={1}
+                    ellipsizeMode={'middle'}>
+                    {file?.uri}
                 </Text>
-            </View>
-            {/*Showing the data of selected Single file*/}
-            {singleFile ?
-                (
-                    <Text style={styles.textStyle}>
-                        File Name: {singleFile[0].name ? singleFile[0].name : ''}
-                        {'\n'}
-                        Type: {singleFile[0].type ? singleFile[0].type : ''}
-                        {'\n'}
-                        File Size: {singleFile[0].size ? singleFile[0].size : ''}
-                        {'\n'}
-                        URI: {singleFile[0].uri ? singleFile[0].uri : ''}
-                        {'\n'}
-                    </Text>
-                )
-
-                : null}
-            <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={selectFile}>
-                <Text style={styles.buttonTextStyle}>Select File</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={uploadImage}>
-                <Text style={styles.buttonTextStyle}>Upload File</Text>
-            </TouchableOpacity>
-        </View>
-    );
+            ))}
+            <Button title="Select 📑" onPress={handleDocumentSelection} />
+            <Button title="Select2 📑" onPress={handleAPI} />
+        </SafeAreaView>
+    )
 }
-
 const styles = StyleSheet.create({
-    mainBody: {
+    container: {
         flex: 1,
-        justifyContent: 'center',
-        padding: 20,
-    },
-    buttonStyle: {
-        backgroundColor: '#307ecc',
-        borderWidth: 0,
-        color: '#FFFFFF',
-        borderColor: '#307ecc',
-        height: 40,
-        alignItems: 'center',
-        borderRadius: 30,
-        marginLeft: 35,
-        marginRight: 35,
-        marginTop: 15,
-    },
-    buttonTextStyle: {
-        color: '#FFFFFF',
-        paddingVertical: 10,
-        fontSize: 16,
-    },
-    textStyle: {
         backgroundColor: '#fff',
-        fontSize: 15,
-        marginTop: 16,
-        marginLeft: 35,
-        marginRight: 35,
-        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
+    uri: {
+        fontSize: 14,
+
+    }
 });
+export default Example;

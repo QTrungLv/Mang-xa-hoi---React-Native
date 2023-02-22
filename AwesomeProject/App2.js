@@ -4,12 +4,13 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HomePage from './components/HomePage/HomePage';
+import Example from './components/Example';
 
 
 const App2 = () => {
   return (
     <>
-      <HomePage />
+      <Example />
     </>
   );
 }

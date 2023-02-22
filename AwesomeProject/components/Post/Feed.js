@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { View, TouchableOpacity, ScrollView } from 'react-native';
 
@@ -10,12 +10,16 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RBSheet from 'react-native-raw-bottom-sheet'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-
+import Dialog from 'react-native-dialog';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { Header } from '../../utils/Header';
+import { useNavigation } from '@react-navigation/native';
 const Container = styled.View`
   flex: 1;
   background: #fff
 `;
-const Header = styled.View`
+const HeaderUI = styled.View`
   height: 50px;
   flex-direction: row;
   align-items: center;
@@ -137,9 +141,28 @@ const TextDetails = styled.Text`
 //
 
 
-const Feed = ({ postDetails }) => {
-  const { author, image, video, described, like, comment, is_liked, is_block } = postDetails;
+const Feed = ({ postDetails}) => {
+  const { id, author, image, video, described, like, comment, is_liked, is_block, can_edit } = postDetails;
+  const navigation = useNavigation()
+  const [isLike, setIsLike] = useState(is_liked)
+  const [countLike, setCountLike] = useState(like)
   const refRBSheet = useRef();
+  const [token, setToken] = useState("")
+  const [showDialog, setShowDialog] = useState(false)
+  const [showDialog2, setShowDialog2] = useState(false)
+  const [showConf, setShowConf] = useState(false)
+  useEffect(() => {
+    const getToken = async () => {
+
+      const value = await AsyncStorage.getItem("@UserToken")
+
+      if (value != null) {
+        setToken(value)
+
+      }
+    }
+    getToken()
+  }, [])
 
   const handleOption1 = () => {
 
@@ -148,8 +171,43 @@ const Feed = ({ postDetails }) => {
   const handleOption2 = () => {
 
   }
-  const handleOption3 = () => {
+  const handleOption3 = async () => {
+    const axios = Header(token)
+    await axios
+      .post(`http://10.0.2.2:8000/api/post/${id}/delete`, {
+        token: token
+      })
+      .then(() => {
+        setShowDialog(true)
+      })
+      .catch(() => {
+        setShowDialog2(true)
+      })
+  }
 
+  const handleOk = () => {
+    handleOption3()
+    setShowConf(false)
+  }
+
+  const handleCancel = () => {
+    setShowConf(false)
+  }
+
+  const handleCancel1 = () => {
+    setShowDialog(false)
+  }
+
+  const handleCancel2 = () => {
+    setShowDialog2(false)
+  }
+
+  const handleLike = async () => {
+    await axios.post(`http://10.0.2.2:8000/api/post/likePost/${id}?token=${token}`)
+      .then((res) => {
+        setIsLike(res.data.data.is_like)
+        setCountLike(res.data.data.like)
+      })
   }
 
   const Avatar = ({ source, online, story }) => {
@@ -168,7 +226,7 @@ const Feed = ({ postDetails }) => {
   return (
     <>
       <Container>
-        <Header>
+        <HeaderUI>
           <Row>
             <Avatar source={{ uri: author?.avatar }} />
             <View style={{ paddingLeft: 10 }}>
@@ -182,14 +240,23 @@ const Feed = ({ postDetails }) => {
           </Row>
 
           <Entypo name="dots-three-horizontal" size={15} color="#222121" onPress={() => refRBSheet.current.open()} />
-        </Header>
+        </HeaderUI>
 
         <Post>{described}</Post>
-        <ScrollView horizontal={true}>
-          {image ? image.map((item) => {
-            <Photo source={{ uri: item.link }} />
-          }) : <></>}
-        </ScrollView>
+
+
+        {image ? image.map((item, index) => {
+          if (!item.link) {
+            return (<></>)
+          } else {
+            return (
+              <View key={index}>
+                <Photo source={{ uri: item.link }} />
+              </View>
+            )
+          }
+        }) : <></>}
+
 
 
         <Footer>
@@ -198,7 +265,7 @@ const Feed = ({ postDetails }) => {
               <IconCount>
                 <AntDesign name="like1" size={12} color="#FFFFFF" />
               </IconCount>
-              <TextCount>{like} likes</TextCount>
+              <TextCount>{countLike} likes</TextCount>
             </Row>
             <TextCount>{comment} comments</TextCount>
           </FooterCount>
@@ -206,15 +273,15 @@ const Feed = ({ postDetails }) => {
           <Separator />
 
           <FooterMenu>
-            <Button>
+            <Button onPress={handleLike}>
               <Iconwrap>
                 <AntDesign
                   name="like2"
                   size={20}
-                  color={is_liked ? '#6495ED' : '#424040'}
+                  color={isLike ? '#6495ED' : '#424040'}
                 />
               </Iconwrap>
-              <Text>Like</Text>
+              <Text style={{ color: isLike ? "#6495ED" : "#424040" }} >Like</Text>
             </Button>
 
             <Button>
@@ -228,16 +295,6 @@ const Feed = ({ postDetails }) => {
               <Text>Comment</Text>
             </Button>
 
-            <Button>
-              <Iconwrap>
-                <MaterialCommunityIcons
-                  name="share-outline"
-                  size={20}
-                  color="#424040"
-                />
-              </Iconwrap>
-              <Text>Share</Text>
-            </Button>
           </FooterMenu>
         </Footer>
         <BottomDivider />
@@ -255,7 +312,7 @@ const Feed = ({ postDetails }) => {
               backgroundColor: '#000',
             },
           }}>
-          <TouchableOpacity onPress={handleOption1}>
+          <TouchableOpacity onPress={() => navigation.navigate("FeedDetails", { post_id: id })}>
             <RowDetails>
               <Entypo name="bell" size={30} style={{ margin: 10 }} />
               <TextDetails
@@ -264,7 +321,7 @@ const Feed = ({ postDetails }) => {
                   fontFamily: 'Cochin',
                   fontWeight: 'bold',
                 }}>
-                Tắt thông báo cho bài viết này
+                Chi tiết bài viết
               </TextDetails>
             </RowDetails>
           </TouchableOpacity>
@@ -281,7 +338,7 @@ const Feed = ({ postDetails }) => {
               </TextDetails>
             </RowDetails>
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleOption3}>
+          <TouchableOpacity onPress={() => setShowConf(true)}>
             <RowDetails>
               <AntDesign name="delete" size={30} style={{ margin: 10 }} />
               <TextDetails
@@ -294,6 +351,7 @@ const Feed = ({ postDetails }) => {
               </TextDetails>
             </RowDetails>
           </TouchableOpacity>
+
           <TouchableOpacity onPress={() => refRBSheet.current.close()}>
             <RowDetails>
               <AntDesign name="closecircleo" size={30} style={{ margin: 10 }} />
@@ -308,6 +366,28 @@ const Feed = ({ postDetails }) => {
             </RowDetails>
           </TouchableOpacity>
         </RBSheet>
+
+        <Dialog.Container visible={showConf}>
+          <Dialog.Description>
+            Bạn có muốn xóa bài viết này không?
+          </Dialog.Description>
+          <Dialog.Button label="Đồng ý" onPress={handleOk} />
+          <Dialog.Button label="Hủy" onPress={handleCancel} />
+        </Dialog.Container>
+
+        <Dialog.Container visible={showDialog}>
+          <Dialog.Description>
+            Bạn đã xóa bài viết thành công
+          </Dialog.Description>
+          <Dialog.Button label="OK" onPress={handleCancel1} />
+        </Dialog.Container>
+
+        <Dialog.Container visible={showDialog2}>
+          <Dialog.Description>
+            Bạn không thể xóa bài viết này
+          </Dialog.Description>
+          <Dialog.Button label="OK" onPress={handleCancel2} />
+        </Dialog.Container>
       </Container>
     </>
 

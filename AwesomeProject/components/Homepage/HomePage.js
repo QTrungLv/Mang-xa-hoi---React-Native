@@ -19,7 +19,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
-import { GET_INFO } from '../../redux/actions/actionTypes';
+import { GET_INFO, GET_POST } from '../../redux/actions/actionTypes';
+
+
 const ContainerAppBar = styled.View`
   width: 100%;
   height: 58px;
@@ -127,20 +129,22 @@ const UserActive = styled.View`
 export default function HomePage({ navigation }) {
 
   const dispatch = useDispatch()
-
-  const [dataPost, setDataPost] = useState()
+  const [posts, setPosts] = useState()
   const [token, setToken] = useState("")
+  const userInfo = useSelector(state => state.user)
+  useEffect(() => {
+    const getToken = async () => {
 
+      const value = await AsyncStorage.getItem("@UserToken")
 
-  const getToken = async () => {
+      if (value != null) {
+        setToken(value)
 
-    const value = await AsyncStorage.getItem("@UserToken")
-
-    if (value != null) {
-      setToken(value)
-
+      }
     }
-  }
+    getToken()
+  }, [])
+
 
   useEffect(() => {
     const getInfoUser = async () => {
@@ -157,7 +161,6 @@ export default function HomePage({ navigation }) {
             type: GET_INFO,
             payload: userInfo
           })
-
         })
         .catch((err) => {
           console.log("error:", err)
@@ -165,26 +168,26 @@ export default function HomePage({ navigation }) {
     }
     getToken()
     getInfoUser()
-  }, [])
+  }, [token])
 
   useEffect(() => {
 
     const getListPost = async () => {
       //const axios = Headers(token)
       let api = `http://10.0.2.2:8000/api/post/?token=${token}&user_id`
-      console.log(api)
+
       await axios
         .get(api)
         .then((res) => {
-          console.log(res.data.data.post)
-          setDataPost(res.data.data.post)
+          setPosts(res.data.data.post)
         })
         .catch((err) => {
+          console.log(err)
         })
     }
     getToken()
     getListPost()
-  }, [])
+  }, [token])
 
 
 
@@ -202,12 +205,12 @@ export default function HomePage({ navigation }) {
       <ContainerAppBar>
         <TextAppBar>facebook</TextAppBar>
         <RowAppBar>
-          <ButtonAppBar>
+          <ButtonAppBar onPress={() => navigation.navigate("Search")}>
             <Feather name="search" size={29} color="black" />
           </ButtonAppBar>
 
-          <ButtonAppBar>
-            <MaterialCommunityIcons name="facebook-messenger" size={29} />
+          <ButtonAppBar onPress={() => navigation.navigate("PersonalPage")} >
+            <MaterialCommunityIcons name="home" size={29} />
           </ButtonAppBar>
         </RowAppBar>
       </ContainerAppBar>
@@ -220,7 +223,7 @@ export default function HomePage({ navigation }) {
       <View onPress={() => navigation.navigate("MakePost")}>
         <ContainerToolBar>
           <RowToolBar onPress={() => navigation.navigate("MakePost")}>
-            <Avatar source={require('../../assets/user1.jpg')} />
+            <Avatar source={{ uri: userInfo.avatar }} />
             <Input placeholder="What's on your mind?" onPress={() => navigation.navigate("MakePost")} />
           </RowToolBar>
           <Divider />
@@ -270,7 +273,7 @@ export default function HomePage({ navigation }) {
       <ToolBar />
 
       {
-        dataPost ? dataPost.map((item) => {
+        posts ? posts.map((item) => {
           return (
             <View key={item.id}>
               <Feed postDetails={item} />
